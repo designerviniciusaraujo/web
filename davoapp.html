@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAVÓ Delivery</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial;background:#f5f5f5;color:#222}
+header{background:#b51220;color:white;padding:20px;text-align:center}
+header h1{margin:0;font-size:27px}
+header p{margin:6px 0 0}
+main{max-width:1100px;margin:auto;padding:16px}
+input,button{font:inherit}
+#search{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;margin-bottom:15px}
+.layout{display:grid;grid-template-columns:1fr 330px;gap:18px;align-items:start}
+.products{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.product,.cart{background:white;border-radius:12px;padding:13px;box-shadow:0 2px 8px #0000000a}
+.product .emoji{font-size:32px}
+.product h3{font-size:14px;min-height:32px;margin:8px 0}
+.price{font-size:18px;font-weight:bold;color:#b51220}
+button{border:0;border-radius:8px;padding:11px;background:#b51220;color:white;cursor:pointer}
+button:disabled{opacity:.5;cursor:wait}
+.add{width:100%;margin-top:10px}
+.cart{position:sticky;top:12px}
+.cart h2{margin-top:0}
+.cart-item{display:flex;justify-content:space-between;gap:8px;padding:10px 0;border-bottom:1px solid #eee;font-size:13px}
+.cart-item button{padding:4px 9px}
+.total{font-size:22px;font-weight:bold;margin:18px 0}
+form input{width:100%;padding:12px;margin:5px 0 10px;border:1px solid #ddd;border-radius:8px}
+form label{font-size:13px;font-weight:bold}
+#status{margin-top:12px;font-size:14px;line-height:1.5}
+.empty{color:#777;font-size:13px}
+@media(max-width:750px){
+.layout{grid-template-columns:1fr}
+.products{grid-template-columns:repeat(2,1fr)}
+.cart{position:static}
+}
+@media(max-width:380px){
+.products{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<header>
+<h1>DAVÓ DELIVERY</h1>
+<p>Seu mercado, direto na sua casa!</p>
+</header>
+
+<main>
+<input id="search" placeholder="🔎 Buscar produtos..." oninput="renderProducts()">
+
+<div class="layout">
+<section>
+<h2>🛒 Nossos produtos</h2>
+<div class="products" id="products"></div>
+</section>
+
+<aside class="cart">
+<h2>Meu carrinho</h2>
+<div id="cartItems"><p class="empty">Seu carrinho está vazio.</p></div>
+<div class="total">Total: <span id="total">R$ 0,00</span></div>
+
+<h3>📦 Finalizar pedido</h3>
+<form id="checkout">
+<label>Nome completo</label>
+<input name="nome" required placeholder="Seu nome">
+
+<label>WhatsApp</label>
+<input name="telefone" required type="tel" placeholder="(12) 99999-9999">
+
+<label>Endereço de entrega</label>
+<input name="endereco" required placeholder="Rua, número e bairro">
+
+<label>Complemento / referência</label>
+<input name="complemento" placeholder="Apartamento, referência...">
+
+<label>Forma de pagamento</label>
+<select name="pagamento" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin:5px 0 12px">
+<option value="">Selecione</option>
+<option>Pix</option>
+<option>Dinheiro</option>
+<option>Cartão na entrega</option>
+</select>
+
+<button id="finish" type="submit" style="width:100%">
+FINALIZAR COMPRA
+</button>
+</form>
+<div id="status" role="status"></div>
+</aside>
+</div>
+</main>
+
+<script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+import {
+ getFirestore, collection, addDoc, serverTimestamp
+} from
+"https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+/* ==================================
+   1. COLOQUE SUAS CREDENCIAIS AQUI
+================================== */
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyD-xzRjMRVUpey19g745DvPjjpCApqSHVE",
+  authDomain: "myops-d7525.firebaseapp.com",
+  projectId: "myops-d7525",
+  storageBucket: "myops-d7525.firebasestorage.app",
+  messagingSenderId: "247824192162",
+  appId: "1:247824192162:web:77c91ab1e3df855dc7fdfb"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ==================================
+   2. CATÁLOGO - 100 PRODUTOS
+================================== */
+
+const dados = [
+["Arroz 5kg",27.90,"🍚"],["Arroz 1kg",6.49,"🍚"],
+["Feijão carioca 1kg",7.99,"🫘"],["Feijão preto 1kg",8.49,"🫘"],
+["Açúcar 1kg",4.49,"🍬"],["Sal 1kg",2.49,"🧂"],
+["Óleo de soja 900ml",7.49,"🫒"],["Azeite 500ml",29.90,"🫒"],
+["Macarrão espaguete",4.49,"🍝"],["Macarrão parafuso",4.99,"🍝"],
+["Molho de tomate",2.99,"🍅"],["Extrato de tomate",4.49,"🍅"],
+["Farinha de trigo 1kg",5.49,"🌾"],["Fubá 1kg",4.49,"🌽"],
+["Farinha de mandioca",7.99,"🌾"],["Café 500g",19.90,"☕"],
+["Leite integral 1L",5.49,"🥛"],["Leite em pó 400g",17.90,"🥛"],
+["Achocolatado 400g",8.99,"🍫"],["Creme de leite",3.99,"🥛"],
+["Leite condensado",6.49,"🥛"],["Biscoito recheado",2.99,"🍪"],
+["Biscoito água e sal",5.49,"🍪"],["Bolacha maisena",4.99,"🍪"],
+["Pão de forma",8.99,"🍞"],["Pão francês (unidade)",0.90,"🥖"],
+["Margarina 500g",8.49,"🧈"],["Manteiga 200g",12.90,"🧈"],
+["Requeijão 200g",8.99,"🧀"],["Queijo mussarela 200g",12.90,"🧀"],
+["Presunto 200g",8.99,"🥓"],["Iogurte 170g",3.49,"🥛"],
+["Iogurte 1L",9.90,"🥛"],["Ovos dúzia",12.90,"🥚"],
+["Frango inteiro kg",12.90,"🍗"],["Peito de frango kg",19.90,"🍗"],
+["Coxa e sobrecoxa kg",12.90,"🍗"],["Carne moída kg",29.90,"🥩"],
+["Acém bovino kg",34.90,"🥩"],["Linguiça toscana kg",19.90,"🌭"],
+["Salsicha 500g",8.49,"🌭"],["Bacon 200g",12.90,"🥓"],
+["Hambúrguer caixa",14.90,"🍔"],["Filé de peixe kg",34.90,"🐟"],
+["Atum lata",8.49,"🐟"],["Sardinha lata",5.49,"🐟"],
+["Batata kg",6.99,"🥔"],["Cebola kg",5.99,"🧅"],
+["Alho 200g",8.99,"🧄"],["Tomate kg",7.99,"🍅"],
+["Cenoura kg",5.49,"🥕"],["Alface unidade",3.99,"🥬"],
+["Banana kg",5.99,"🍌"],["Maçã kg",9.99,"🍎"],
+["Laranja kg",4.99,"🍊"],["Limão kg",4.99,"🍋"],
+["Mamão unidade",7.99,"🍈"],["Melancia kg",3.49,"🍉"],
+["Uva bandeja",9.90,"🍇"],["Abacaxi unidade",8.99,"🍍"],
+["Refrigerante 2L",9.99,"🥤"],["Refrigerante 350ml",3.49,"🥤"],
+["Água mineral 1,5L",3.49,"💧"],["Água com gás",3.99,"💧"],
+["Suco de uva 1L",9.99,"🧃"],["Suco de laranja 1L",8.99,"🧃"],
+["Chá gelado 1,5L",7.99,"🧃"],["Energético 473ml",9.90,"⚡"],
+["Cerveja sem álcool 350ml",5.49,"🥤"],["Achocolatado pronto",3.99,"🥛"],
+["Detergente",2.49,"🧽"],["Esponja de louça",2.49,"🧽"],
+["Sabão em pó 1kg",12.90,"🧼"],["Amaciante 2L",11.90,"🧴"],
+["Água sanitária 1L",3.99,"🧴"],["Desinfetante 2L",7.99,"🧴"],
+["Limpador multiuso",5.99,"🧴"],["Papel toalha",5.49,"🧻"],
+["Papel higiênico 12 rolos",17.90,"🧻"],["Saco de lixo",8.99,"🗑️"],
+["Sabonete",2.49,"🧼"],["Shampoo 350ml",14.90,"🧴"],
+["Condicionador 350ml",15.90,"🧴"],["Creme dental",4.99,"🪥"],
+["Escova dental",5.99,"🪥"],["Desodorante",12.90,"🧴"],
+["Absorvente pacote",8.99,"🧻"],["Fralda infantil pacote",39.90,"👶"],
+["Lenço umedecido",9.90,"👶"],["Ração para cães 1kg",12.90,"🐶"],
+["Ração para gatos 1kg",16.90,"🐱"],["Pilha AA pacote",9.90,"🔋"],
+["Fósforo pacote",2.49,"🔥"],["Vela pacote",6.99,"🕯️"],
+["Papel alumínio",7.49,"🥡"],["Filme plástico",6.49,"🥡"],
+["Milho verde lata",4.49,"🌽"],["Ervilha lata",4.49,"🥫"],
+["Maionese 500g",8.99,"🥫"],["Ketchup 400g",7.99,"🍅"],
+["Mostarda 200g",5.49,"🌭"],["Gelatina caixa",2.49,"🍮"],
+["Pipoca 500g",5.49,"🍿"],["Amendoim 500g",9.90,"🥜"],
+["Chocolate barra",6.99,"🍫"],["Sorvete 1,5L",24.90,"🍦"]
+];
+
+const produtos = dados.map((p,i)=>({
+ id:i+1,nome:p[0],preco:p[1],emoji:p[2]
+}));
+
+let carrinho = {};
+
+const moeda = v => v.toLocaleString("pt-BR",{
+ style:"currency",currency:"BRL"
+});
+
+window.renderProducts = function(){
+ const termo=document.getElementById("search").value.toLowerCase();
+ document.getElementById("products").innerHTML=
+ produtos.filter(p=>p.nome.toLowerCase().includes(termo))
+ .map(p=>`
+ <article class="product">
+ <div class="emoji">${p.emoji}</div>
+ <h3>${p.nome}</h3>
+ <div class="price">${moeda(p.preco)}</div>
+ <button class="add" onclick="add(${p.id})">Adicionar +</button>
+ </article>
+ `).join("");
+};
+
+window.add = function(id){
+ carrinho[id]=(carrinho[id]||0)+1;
+ renderCart();
+};
+
+window.changeQty = function(id,delta){
+ carrinho[id]=(carrinho[id]||0)+delta;
+ if(carrinho[id]<=0) delete carrinho[id];
+ renderCart();
+};
+
+function getOrderItems(){
+ return Object.entries(carrinho).map(([id,quantidade])=>{
+  const p=produtos.find(x=>x.id===Number(id));
+  return {
+   produto:p.nome,
+   quantidade,
+   precoUnitario:p.preco,
+   subtotal:Number((p.preco*quantidade).toFixed(2))
+  };
+ });
+}
+
+function getTotal(){
+ return Number(getOrderItems().reduce((s,p)=>s+p.subtotal,0).toFixed(2));
+}
+
+function renderCart(){
+ const items=getOrderItems();
+ document.getElementById("cartItems").innerHTML=items.length
+ ? items.map(p=>`
+ <div class="cart-item">
+ <div><b>${p.produto}</b><br>
+ ${p.quantidade} x ${moeda(p.precoUnitario)}
+ </div>
+ <div>
+ <b>${moeda(p.subtotal)}</b><br>
+ <button onclick="changeQty(${produtos.find(x=>x.nome===p.produto).id},-1)">−</button>
+ <button onclick="changeQty(${produtos.find(x=>x.nome===p.produto).id},1)">+</button>
+ </div>
+ </div>`).join("")
+ : '<p class="empty">Seu carrinho está vazio.</p>';
+
+ document.getElementById("total").textContent=moeda(getTotal());
+}
+
+renderProducts();
+renderCart();
+
+/* ==================================
+   3. FINALIZAR E ENVIAR AO FIRESTORE
+================================== */
+
+document.getElementById("checkout").addEventListener("submit",async e=>{
+ e.preventDefault();
+
+ const status=document.getElementById("status");
+ const botao=document.getElementById("finish");
+
+ if(!Object.keys(carrinho).length){
+  status.textContent="Adicione produtos antes de finalizar.";
+  return;
+ }
+
+ const form=new FormData(e.target);
+ const itens=getOrderItems();
+ const total=getTotal();
+
+ const pedido={
+  cliente:{
+   nome:form.get("nome").trim(),
+   telefone:form.get("telefone").trim(),
+   endereco:form.get("endereco").trim(),
+   complemento:form.get("complemento").trim()
+  },
+  pagamento:form.get("pagamento"),
+  produtos:itens,
+  total,
+  status:"novo",
+  origem:"site_davo",
+  criadoEm:serverTimestamp()
+ };
+
+ botao.disabled=true;
+ botao.textContent="ENVIANDO PEDIDO...";
+ status.textContent="";
+
+ try{
+  const ref=await addDoc(collection(db,"pedidos"),pedido);
+
+  status.innerHTML=`
+   <div style="background:#e5f8e9;padding:13px;border-radius:8px;color:#17652b">
+   <b>✅ Pedido recebido com sucesso!</b><br>
+   Número: ${ref.id}<br>
+   Total: ${moeda(total)}<br>
+   Aguarde o contato da nossa equipe.
+   </div>`;
+
+  carrinho={};
+  renderCart();
+  e.target.reset();
+
+ }catch(error){
+  console.error("Erro Firebase:",error);
+  status.textContent="Não foi possível enviar o pedido. Verifique sua conexão ou tente novamente.";
+ }finally{
+  botao.disabled=false;
+  botao.textContent="FINALIZAR COMPRA";
+ }
+});
+</script>
+</body>
+</html>

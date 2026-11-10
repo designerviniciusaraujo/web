@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAVÓ | Delivery local</title>
+<style>
+:root{--g:#126b4b;--bg:#f5f7f4;--ink:#18221d;--muted:#6b756f;--line:#e3e9e4;--white:#fff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:var(--g);color:#fff;padding:20px 16px}header>div,main{max-width:1050px;margin:auto}
+.logo{font-weight:950;font-size:26px;letter-spacing:1px}.sub{opacity:.85;font-size:13px}
+main{padding:18px 14px 55px}.search{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:12px;font:inherit;background:white}
+.tabs{display:flex;gap:8px;overflow:auto;padding:13px 0}.tabs button{white-space:nowrap;border:1px solid var(--line);border-radius:999px;background:#fff;padding:9px 13px;font:inherit;cursor:pointer}.tabs button.on{background:var(--g);color:white;border-color:var(--g)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:16px;align-items:start}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}
+.product,.cart{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}.product{display:flex;flex-direction:column;gap:7px}.emoji{font-size:25px}.store{font-size:11px;text-transform:uppercase;color:var(--g);font-weight:800;letter-spacing:.06em}.product h3{font-size:15px;margin:0;line-height:1.3}.desc{color:var(--muted);font-size:12px;min-height:30px}.price{font-size:18px;font-weight:850;margin-top:auto}.muted{font-size:11px;color:var(--muted)}
+.add,.send{border:0;border-radius:9px;background:var(--g);color:#fff;padding:10px;font-weight:750;cursor:pointer}.add{width:100%;margin-top:4px}.cart{position:sticky;top:12px}.cart h2{font-size:18px;margin:0 0 10px}.cartline{display:flex;justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}.qty{display:flex;align-items:center;gap:7px}.qty button{border:1px solid var(--line);background:#fff;border-radius:6px;padding:2px 7px}.total{font-weight:900;font-size:18px;padding:12px 0}.send{width:100%}.disclaimer{margin:12px 0;background:#fff7d9;border:1px solid #eedc9b;padding:11px;border-radius:10px;font-size:12px;color:#665519}.empty{padding:25px;text-align:center;color:var(--muted)}
+@media(max-width:760px){.layout{grid-template-columns:1fr}.cart{position:static;order:-1}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){.grid{grid-template-columns:1fr}}
+</style></head>
+<body>
+<header><div><div class="logo">DAVÓ<span style="color:#c8f36a">.</span></div><div class="sub">Delivery local • Ubatuba, SP</div></div></header>
+<main>
+ <div class="disclaimer"><b>Catálogo piloto:</b> 33 produtos reais encontrados em lojas e catálogos online. Preços e estoque podem mudar; confirme com o vendedor antes de pagar. O DAVÓ ainda não processa pagamentos nem confirma entregas automaticamente.</div>
+ <input id="q" class="search" placeholder="Buscar produto...">
+ <nav class="tabs" id="tabs"></nav>
+ <div class="layout"><div><div class="grid" id="products"></div><div id="none" class="empty" hidden>Nenhum produto encontrado.</div></div>
+ <aside class="cart"><h2>Seu pedido <span id="count" class="muted">(0)</span></h2><div id="lines"><div class="muted">Adicione produtos para montar o pedido.</div></div><div class="total" id="total">Total: R$ 0,00</div><button id="send" class="send">Enviar pedido</button><p class="muted">O pedido será encaminhado ao vendedor correspondente pelo canal disponível.</p></aside></div>
+</main>
+<script>
+const products=[
+["Frisco refresco em pó laranja 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó abacaxi 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó uva 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó manga 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó limão 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó maracujá 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó morango 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó caju 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó laranja/acerola 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Frisco refresco em pó guaraná 18g","Semar Ubatuba","Bebidas",0.89,"🍹"],
+["Mid refresco em pó limão 20g","Semar Ubatuba","Bebidas",0.99,"🍹"],
+["Mid refresco em pó morango 20g","Semar Ubatuba","Bebidas",0.99,"🍹"],
+["Biscoito recheado Panco sabor baunilha 42g","Semar Ubatuba","Mercearia",0.99,"🍪"],
+["Biscoito recheado Panco sabor morango 42g","Semar Ubatuba","Mercearia",0.99,"🍪"],
+["Palito de dente Fiat Lux 100 unidades","Semar Ubatuba","Casa",0.99,"🪥"],
+["Palito de dente Gina 100 unidades","Semar Ubatuba","Casa",1.19,"🪥"],
+["Wafer Passatempo Nestlé morango 20g","Semar Ubatuba","Mercearia",1.29,"🍪"],
+["Wafer mini Passatempo Nestlé chocolate 20g","Semar Ubatuba","Mercearia",1.29,"🍪"],
+["Hambúrguer Aurora Faroeste Burger 56g","Semar Ubatuba","Congelados",1.29,"🍔"],
+["Hambúrguer bovino Aurora churrasco 56g","Semar Ubatuba","Congelados",1.29,"🍔"],
+["Bombom Bon o Bon brigadeiro 50g","Semar Ubatuba","Mercearia",1.29,"🍫"],
+["Fermento biológico Fermix Dona Benta 10g","Semar Ubatuba","Mercearia",1.29,"🥣"],
+["Gelatina Bretzke abacaxi 30g","Semar Ubatuba","Mercearia",1.29,"🍮"],
+["Gelatina Bretzke framboesa 30g","Semar Ubatuba","Mercearia",1.29,"🍮"],
+["Tomate seco em conserva 1,4kg","Sabores Ubatuba","Mercearia",44.90,"🍅"],
+["Uva passa preta","Sabores Ubatuba","Mercearia",7.99,"🍇"],
+["Tomate pelado italiano lata 2,5kg","Sabores Ubatuba","Mercearia",47.99,"🍅"],
+["Tempero baiano","Sabores Ubatuba","Temperos",14.99,"🧂"],
+["Tempero Ana Maria","Sabores Ubatuba","Temperos",19.99,"🧂"],
+["Tâmara com caroço","Sabores Ubatuba","Mercearia",9.99,"🌴"],
+["Quinoa","Sabores Ubatuba","Grãos",14.99,"🌾"],
+["Páprica defumada","Sabores Ubatuba","Temperos",11.99,"🧂"],
+["Orégano","Sabores Ubatuba","Temperos",19.99,"🌿"]
+].map((p,i)=>({id:i,name:p[0],store:p[1],cat:p[2],price:p[3],emoji:p[4]}));
+const cart={};let category="Todos";
+const cats=["Todos",...new Set(products.map(p=>p.cat))];
+const tabs=document.getElementById("tabs");
+cats.forEach(c=>{let b=document.createElement("button");b.textContent=c;b.className=c==="Todos"?"on":"";b.onclick=()=>{category=c;[...tabs.children].forEach(x=>x.classList.toggle("on",x===b));render()};tabs.appendChild(b)});
+const br=n=>n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+function render(){
+ const q=document.getElementById("q").value.toLowerCase();
+ const shown=products.filter(p=>(category==="Todos"||p.cat===category)&&(`${p.name} ${p.store}`).toLowerCase().includes(q));
+ document.getElementById("products").innerHTML=shown.map(p=>`<article class="product"><div class="emoji">${p.emoji}</div><div class="store">${p.store}</div><h3>${p.name}</h3><div class="desc">${p.cat}</div><div class="price">${br(p.price)}</div><div class="muted">Preço consultado online; confirmar disponibilidade.</div><button class="add" onclick="add(${p.id})">Adicionar</button></article>`).join("");
+ document.getElementById("none").hidden=shown.length>0;renderCart();
+}
+function add(id){cart[id]=(cart[id]||0)+1;renderCart()}
+function change(id,d){cart[id]=(cart[id]||0)+d;if(cart[id]<=0)delete cart[id];renderCart()}
+function renderCart(){
+ let ids=Object.keys(cart);let count=ids.reduce((s,id)=>s+cart[id],0),sum=ids.reduce((s,id)=>s+cart[id]*products[id].price,0);
+ document.getElementById("count").textContent=`(${count})`;document.getElementById("total").textContent="Total: "+br(sum);
+ document.getElementById("lines").innerHTML=ids.length?ids.map(id=>{let p=products[id];return `<div class="cartline"><span>${p.name}<br><b>${br(p.price*cart[id])}</b></span><span class="qty"><button onclick="change(${id},-1)">−</button>${cart[id]}<button onclick="change(${id},1)">+</button></span></div>`}).join(""):'<div class="muted">Adicione produtos para montar o pedido.</div>';
+}
+document.getElementById("q").addEventListener("input",render);
+document.getElementById("send").onclick=()=>{
+ let ids=Object.keys(cart);if(!ids.length){alert("Adicione pelo menos um produto.");return}
+ let stores=[...new Set(ids.map(id=>products[id].store))];
+ if(stores.length>1){alert("Seu carrinho tem produtos de dois vendedores. Faça um pedido por vez: remova os itens de uma das lojas.");return}
+ let store=stores[0],lines=ids.map(id=>`${cart[id]}x ${products[id].name} — ${br(products[id].price*cart[id])}`).join("\n");
+ let total=ids.reduce((s,id)=>s+cart[id]*products[id].price,0);
+ let msg=encodeURIComponent(`Olá! Montei este pedido pelo DAVÓ:\n${lines}\nTotal estimado: ${br(total)}\nPor favor, confirme estoque, preço final, entrega e pagamento.`);
+ let url=store==="Sabores Ubatuba"?"https://wa.me/5512996719860?text="+msg:"https://www.semarentrega.com.br/2990/loja-ubatuba";
+ window.open(url,"_blank");
+};
+render();
+</script>
+</body></html>

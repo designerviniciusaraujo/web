@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAVÓ | Painel de Pedidos</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f3f4f6;color:#222;font-family:Arial,sans-serif}
+header{background:#b51220;color:white;padding:20px}
+header h1{margin:0;font-size:24px}
+header p{margin:5px 0 0;font-size:13px}
+main{max-width:1100px;margin:auto;padding:18px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+button{border:0;border-radius:8px;padding:11px 14px;cursor:pointer;font-weight:bold}
+.red{background:#b51220;color:white}
+.gray{background:#e5e7eb;color:#333}
+.green{background:#16834a;color:white}
+.blue{background:#1769aa;color:white}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.stat{background:white;border-radius:12px;padding:17px;box-shadow:0 2px 8px #00000008}
+.stat small{color:#777}
+.stat strong{display:block;font-size:27px;margin-top:8px}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.filters button.active{background:#b51220;color:white}
+#orders{display:grid;gap:13px}
+.order{background:white;border-radius:12px;padding:17px;border-left:5px solid #b51220;box-shadow:0 2px 8px #00000008}
+.order.preparo{border-left-color:#1769aa}
+.order.concluido{border-left-color:#16834a}
+.order-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.order h3{margin:0 0 5px}
+.order p{margin:7px 0;font-size:14px;line-height:1.5}
+.tag{display:inline-block;padding:6px 9px;border-radius:20px;background:#fce8e8;color:#a00;font-size:12px;font-weight:bold}
+.tag.preparo{background:#e5f1ff;color:#1769aa}
+.tag.concluido{background:#e4f7e9;color:#16834a}
+.items{border-top:1px solid #eee;border-bottom:1px solid #eee;padding:10px 0;margin:12px 0}
+.item{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:5px 0}
+.total{font-size:21px;font-weight:bold;margin:13px 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+#login{max-width:400px;margin:60px auto;background:white;padding:25px;border-radius:14px}
+input{width:100%;padding:13px;margin:8px 0 15px;border:1px solid #ddd;border-radius:8px}
+#login button{width:100%}
+#message{font-size:13px;color:#b51220;margin-top:10px}
+.empty{text-align:center;background:white;padding:35px;border-radius:12px;color:#777}
+.hidden{display:none!important}
+@media(max-width:600px){
+main{padding:12px}
+.stats{gap:7px}
+.stat{padding:12px}
+.stat strong{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<header>
+<h1>DAVÓ | PEDIDOS</h1>
+<p>Painel de recebimento de pedidos</p>
+</header>
+
+<section id="login">
+<h2>Entrar no painel</h2>
+<form id="loginForm">
+<label>E-mail administrativo</label>
+<input id="email" type="email" required placeholder="admin@email.com">
+<label>Senha</label>
+<input id="password" type="password" required placeholder="Sua senha">
+<button class="red" type="submit">ENTRAR</button>
+</form>
+<div id="message"></div>
+</section>
+
+<main id="panel" class="hidden">
+<div class="top">
+<div>
+<h2>Pedidos recebidos</h2>
+<small id="connection">Conectando ao Firebase...</small>
+</div>
+<button class="gray" id="logout">Sair</button>
+</div>
+
+<div class="stats">
+<div class="stat">
+<small>Novos</small>
+<strong id="newCount">0</strong>
+</div>
+<div class="stat">
+<small>Em preparo</small>
+<strong id="prepCount">0</strong>
+</div>
+<div class="stat">
+<small>Concluídos</small>
+<strong id="doneCount">0</strong>
+</div>
+</div>
+
+<div class="filters">
+<button class="gray active" data-filter="todos">Todos</button>
+<button class="gray" data-filter="novo">Novos</button>
+<button class="gray" data-filter="em_preparo">Em preparo</button>
+<button class="gray" data-filter="concluido">Concluídos</button>
+</div>
+
+<div id="orders">
+<div class="empty">Aguardando pedidos...</div>
+</div>
+</main>
+
+<script type="module">
+import {initializeApp} from
+"https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+
+import {
+ getFirestore,collection,onSnapshot,query,orderBy,
+ doc,updateDoc,serverTimestamp
+} from
+"https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore.js";
+
+import {
+ getAuth,signInWithEmailAndPassword,
+ onAuthStateChanged,signOut
+} from
+"https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+/* COLOQUE SUAS CREDENCIAIS */
+
+const firebaseConfig={
+ apiKey: "AIzaSyD-xzRjMRVUpey19g745DvPjjpCApqSHVE",
+  authDomain: "myops-d7525.firebaseapp.com",
+  projectId: "myops-d7525",
+  storageBucket: "myops-d7525.firebasestorage.app",
+  messagingSenderId: "247824192162",
+  appId: "1:247824192162:web:77c91ab1e3df855dc7fdfb"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
+
+let pedidos=[];
+let filtro="todos";
+let unsubscribe=null;
+
+const $=id=>document.getElementById(id);
+const money=v=>Number(v||0).toLocaleString("pt-BR",{
+ style:"currency",currency:"BRL"
+});
+
+const safe=v=>String(v??"").replace(/[&<>"']/g,c=>({
+ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+})[c]);
+
+function dataFormatada(timestamp){
+ if(!timestamp)return "Data não informada";
+ const date=timestamp.toDate();
+ return date.toLocaleString("pt-BR");
+}
+
+function statusNome(s){
+ return {
+ novo:"NOVO PEDIDO",
+ em_preparo:"EM PREPARO",
+ concluido:"CONCLUÍDO"
+ }[s]||s;
+}
+
+/* LOGIN */
+
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();
+ $("message").textContent="Entrando...";
+ try{
+  await signInWithEmailAndPassword(
+   auth,$("email").value.trim(),$("password").value
+  );
+  $("password").value="";
+ }catch(error){
+  $("message").textContent="E-mail ou senha inválidos.";
+  console.error(error);
+ }
+});
+
+$("logout").onclick=()=>signOut(auth);
+
+onAuthStateChanged(auth,user=>{
+ if(user){
+  $("login").classList.add("hidden");
+  $("panel").classList.remove("hidden");
+  iniciarPedidos();
+ }else{
+  if(unsubscribe){unsubscribe();unsubscribe=null}
+  pedidos=[];
+  $("panel").classList.add("hidden");
+  $("login").classList.remove("hidden");
+ }
+});
+
+/* RECEBIMENTO EM TEMPO REAL */
+
+function iniciarPedidos(){
+ if(unsubscribe)unsubscribe();
+
+ $("connection").textContent="Conectando...";
+
+ const q=query(
+  collection(db,"pedidos"),
+  orderBy("criadoEm","desc")
+ );
+
+ unsubscribe=onSnapshot(q,snapshot=>{
+  pedidos=snapshot.docs.map(d=>({
+   id:d.id,...d.data()
+  }));
+
+  $("connection").textContent="● Conectado em tempo real";
+  $("connection").style.color="green";
+  render();
+ },error=>{
+  console.error(error);
+  $("connection").textContent="Erro ao carregar pedidos. Verifique as regras do Firestore.";
+  $("connection").style.color="#b51220";
+ });
+}
+
+/* EXIBIÇÃO */
+
+function render(){
+ const novos=pedidos.filter(p=>p.status==="novo").length;
+ const preparo=pedidos.filter(p=>p.status==="em_preparo").length;
+ const concluidos=pedidos.filter(p=>p.status==="concluido").length;
+
+ $("newCount").textContent=novos;
+ $("prepCount").textContent=preparo;
+ $("doneCount").textContent=concluidos;
+
+ const lista=filtro==="todos"
+ ?pedidos:pedidos.filter(p=>p.status===filtro);
+
+ if(!lista.length){
+  $("orders").innerHTML='<div class="empty">Nenhum pedido encontrado.</div>';
+  return;
+ }
+
+ $("orders").innerHTML=lista.map(p=>{
+  const status=p.status||"novo";
+  const produtos=Array.isArray(p.produtos)?p.produtos:[];
+
+  return `
+  <article class="order ${safe(status)}">
+   <div class="order-head">
+    <div>
+     <h3>Pedido #${safe(p.id.slice(-8).toUpperCase())}</h3>
+     <small>${safe(dataFormatada(p.criadoEm))}</small>
+    </div>
+    <span class="tag ${safe(status)}">${safe(statusNome(status))}</span>
+   </div>
+
+   <p><b>Cliente:</b> ${safe(p.cliente?.nome)}</p>
+   <p><b>Telefone:</b> ${safe(p.cliente?.telefone)}</p>
+   <p><b>Endereço:</b> ${safe(p.cliente?.endereco)}</p>
+   <p><b>Complemento:</b> ${safe(p.cliente?.complemento||"Não informado")}</p>
+   <p><b>Pagamento:</b> ${safe(p.pagamento)}</p>
+
+   <div class="items">
+    <b>Produtos do pedido</b>
+    ${produtos.map(item=>`
+     <div class="item">
+      <span>${safe(item.quantidade)}x ${safe(item.produto)}</span>
+      <b>${money(item.subtotal)}</b>
+     </div>
+    `).join("")}
+   </div>
+
+   <div class="total">Total: ${money(p.total)}</div>
+
+   <div class="actions">
+    ${status==="novo"?`
+     <button class="blue" data-id="${safe(p.id)}" data-status="em_preparo">
+      ACEITAR / PREPARAR
+     </button>`:""}
+    ${status==="em_preparo"?`
+     <button class="green" data-id="${safe(p.id)}" data-status="concluido">
+      CONCLUIR PEDIDO
+     </button>`:""}
+   </div>
+  </article>`;
+ }).join("");
+}
+
+/* FILTROS */
+
+document.querySelectorAll("[data-filter]").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  filtro=btn.dataset.filter;
+  document.querySelectorAll("[data-filter]").forEach(b=>
+   b.classList.toggle("active",b===btn)
+  );
+  render();
+ });
+});
+
+/* ALTERAR STATUS */
+
+$("orders").addEventListener("click",async e=>{
+ const btn=e.target.closest("button[data-id]");
+ if(!btn)return;
+
+ btn.disabled=true;
+
+ try{
+  await updateDoc(doc(db,"pedidos",btn.dataset.id),{
+   status:btn.dataset.status,
+   atualizadoEm:serverTimestamp()
+  });
+ }catch(error){
+  console.error(error);
+  alert("Não foi possível atualizar o pedido.");
+  btn.disabled=false;
+ }
+});
+</script>
+</body>
+</html>
