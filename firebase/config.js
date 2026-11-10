@@ -10,7 +10,7 @@ from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"
 
 const firebaseConfig = {
 
-apiKey: "AIzaSyD-xzRjMRVUpey19g745DvPjjpCApqSHVE",
+  apiKey: "AIzaSyD-xzRjMRVUpey19g745DvPjjpCApqSHVE",
   authDomain: "myops-d7525.firebaseapp.com",
   projectId: "myops-d7525",
   storageBucket: "myops-d7525.firebasestorage.app",

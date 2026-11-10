@@ -1,250 +1,207 @@
-   
 <style>
-  .minimal .user-content-box,
-  .minimal #logo {
-    display: none;
+  .minimal .user-content-box, .minimal #logo{
+  display: none;
   }
-
-  @media(max-width:1000px){
-    nav#horizontal-nav,div#userMenuBtn{
-      display: none !important;
-    }
-  }
+  
 </style>
-
-<!-- Header -->
-<div id="headerContainer" class="absolute"></div>
-
  
-
-
-<!-- CONTEÚDO DO HEADER -->
-
-<div class="flex h-20 items-center justify-between px-4 md:px-6">
-
-
-  <!-- Menu mobile -->
-
-  <button
-    data-auth="logged"
-    onclick="toggleSidebar()"
-    class="hidden h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-soft transition hover:border-white/20 hover:text-white xl:hidden"
-  >
-
-    <i
-      data-lucide="menu"
-      class="h-5 w-5"
-    ></i>
-
-  </button>
-
-
-  <!-- Logo -->
-
-  <div
-    id="logo"
-    class="flex items-center justify-center xl:justify-start"
-  >
-
-    <a href="./">
-
-      <img
-        class="h-10 md:h-11"
-        src="assets/images/ft-logo.png"
-        alt="Logo"
-      >
-
-    </a>
-
+  <!-- <header class="md:absolute md:top-0 md:left-0 md:w-full md:z-40 "> -->
+  <div id="headerContainer" class="absolute  ">
+     
+    <div class="text-left">
+      <!-- <div id="userMenuName" class="font-semibold text-sm">
+        </div> -->
+      <div id="userMenuMail" class="text-xs text-zinc-500 ">
+      </div>
+    </div>
+    </button>
   </div>
-
-
-  <!-- Menu Desktop -->
-
-  <nav
-    id="horizontal-nav"
-    data-auth="logged"
-    class="hidden items-center gap-8 text-xs text-white/45"
-  >
-
+ 
+  <div class="flex items-center justify-between h-20 px-4">
+    <!-- Menu mobile -->
+  
+  <!-- Menu mobile -->
     <button
       onclick="toggleSidebar()"
-      class="text-white/45 transition hover:text-white"
-    >
-
-      <i
-        id="sidebarToggleIcon"
-        data-lucide="menu"
-        class="h-4 w-4"
-      ></i>
-
+      class="xl:hidden flex flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300 bg-white hover:bg-slate-100 lg:hidden"
+      >
+    <i data-lucide="menu"></i>
     </button>
-
- 
-
+    <div id="logo" class="flex  justify-center xl:justify-start flex items-center">
+      <a class="">
+      <img
+        class="h-12 "
+        src="assets/images/ft-logo.png"
+        alt="Logo"
+        >
+      </a>
+    </div>
+    <!-- Menu Desktop -->
+    <nav id="horizontal-nav" class="hidden xl:flex  items-center gap-8  ">
+        <button
+      onclick="toggleSidebar()"
+      class="rounded-lg hover:bg-slate-800 transition"
+      >
+    <i id="sidebarToggleIcon" data-lucide="menu"></i>
    
-
-<a
-  href="#"
-  data-page="home"
-  class="transition hover:text-white"
->
-  Home
-</a>
-    
- <!-- fecha -->
- <a
-      href="/fecha.html"
+    </button>
+      <button onclick="toggleTheme()  " class="bg-theme hidden ">
+    <i id="themeIcon" data-lucide="moon"></i>
+</button>
+  <a href="/hub" class="relative hover:text-[#5864be]">
+       OMDA Tracker
+      <span class="absolute -top-3 right-5
+        rounded-full
+        bg-emerald-500/20 border border-emerald-500/40
+        text-emerald-400
+        px-1 py-0
+        text-[8px] font-semibold
+        leading-3">
+      Novo
+      </span> 
+      </a>
+      <a href="#" class="relative hover:text-[#5864be]">
+      Home 
       
-      class=" sidebar-item group flex items-center gap-3 p-3 rounded-xl text-white/45 transition-all duration-200 hover:bg-surface hover:text-white"
-    >
+      </a>
+      <a href="#" class="hover:text-[#5864be]">
+      Fansubs
+      </a>
+
+      <a href="#" class="hover:text-[#5864be]  ">
+      Torrents
+
+      </a>
      
-      <span class="sidebar-text text-sm">
-    OS FECHA  
-      </span>
-    </a>
-       
- <a
-      href="/down.html"
+         <a href="#" class="hover:text-[#5864be]  ">
+      Mangas
+
+      </a>
+      <a href="#" class="hover:text-[#5864be]  ">
+      Conquistas
+
+      </a>
+     
+
       
-      class=" sidebar-item group flex items-center gap-3 p-3 rounded-xl text-white/45 transition-all duration-200 hover:bg-surface hover:text-white"
-    >
+       <a href="#" class="hover:text-[#5864be]">
+      TOP 10
+
+      </a>
+
+
+
+
+    </nav>
+    <!-- Busca desktop -->
+    <div class=" hidden  relative w-96 ml-6 mr-6">
+      <input
+        class="input"
+        placeholder="Buscar torrents, animes, filmes..."
+        >
+    </div>
+    <div class="hidden   items-center gap-6 text-sm">
+      <div>
+        <div class="text-green-400 font-semibold">
+          3.4 TB
+        </div>
+        <div class="text-xs opacity-60">
+          Download
+        </div>
+      </div>
+      <div>
+        <div class="text-blue-400 font-semibold">
+          1.9 TB
+        </div>
+        <div class="text-xs opacity-60">
+          Upload
+        </div>
+      </div>
+      <div>
+        <div class="text-[#5864be] font-semibold">
+          1.82
+        </div>
+        <div class="text-xs opacity-60">
+          Ratio
+        </div>
+      </div>
+    </div>
+    <!-- Botões -->
+    <div class=" hidden xl:flex items-center justify-center gap-3 md:ml-6 md:mr-6">
+      <button class="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-300 bg-purple hover:bg-slate-100">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-lucide="search" aria-hidden="true" class="lucide lucide-search h-5 w-5"><path d="m21 21-4.34-4.34"></path><circle cx="11" cy="11" r="8"></circle></svg>
+            </button>
+      <button id="fullscreenToggle" class="fullscreen-btn hidden">
+      <i id="iconMaximize" data-lucide="maximize-2"></i>
+      <i id="iconMinimize" data-lucide="minimize-2" style="display:none;"></i>
+      </button>
      
-      <span class="sidebar-text text-sm">
-        Rotina  
-      </span>
-    </a>
-    
-    <a
-      href="/inteligencia.html"
-      
-      class=" sidebar-item group flex items-center gap-3 p-3 rounded-xl text-white/45 transition-all duration-200 hover:bg-surface hover:text-white"
-    >
-     
-      <span class="sidebar-text text-sm">
-        Inteligência Profissional  
-      </span>
-    </a>
-    
+      <!-- <div class="relative hidden"> -->
+      <div class="  ">
 
+    <!-- Botão notificações -->
+    <button id="notificatixonBtn"
+        class="relative p-2 rounded-lg hover:bg-slate-800 transition ">
 
-   <!-- historico -->
-    <a
-      href="#"
-      data-page="historia"
-      class=" sidebar-item group flex items-center gap-3 p-3 rounded-xl text-white/45 transition-all duration-200 hover:bg-surface hover:text-white"
-    >
-     
-      <span class="sidebar-text text-sm">
-        Histórico Profissional
-      </span>
-    </a>
- 
- 
-  
-  </nav>
+        <i data-lucide="bell"></i>
 
-
- 
-
-
-  
-
-  <!-- Botões -->
-
-  <div
-    data-auth="logged"
-    class="hidden items-center justify-center gap-2 ml-6 mr-6"
-  >
-
-
-    <!-- Busca -->
-
-    <button
-      class="hidden flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-surface text-soft transition hover:border-white/20 hover:bg-white/5 hover:text-white"
-    >
-
-      <i
-        data-lucide="search"
-        class="h-5 w-5"
-      ></i>
+        <!-- contador -->
+        <span id="notificationCount"
+            class="hidden absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-2">
+            0
+        </span>
 
     </button>
 
 
-    <!-- Fullscreen -->
-
-    <button
-      id="fullscreenToggle"
-      class="fullscreen-btn hidden"
-    >
-
-      <i
-        id="iconMaximize"
-        data-lucide="maximize-2"
-      ></i>
-
-      <i
-        id="iconMinimize"
-        data-lucide="minimize-2"
-        style="display:none;"
-      ></i>
-
-    </button>
+    <!-- Dropdown -->
+    <div id="notificationDropdown"
+        class="hidden absolute right-0 mt-3 w-80 
+        g-[#171717] rounded-[24px] p-4 xl:p-6 border border-white/10
+        z-50
+        max-h-[calc(100vh-100px)]
+        overflow-y-auto">
 
 
-  
+        <h3 class="font-bold mb-3 text-white">
+            Notificações
+        </h3>
 
-  </div>
+
+        <div id="notificationList" class="space-y-3">
+
+            <!-- notificações entram aqui -->
+
+        </div>
 
 
-  <!-- Usuário -->
+    </div>
 
+</div>
+    </div>
+    <!-- User -->
   <div
     id="userMenuBtn"
-    data-auth="logged"
-    class="hidden items-center gap-3 rounded-xl px-2 py-2 cursor-pointer transition-all duration-200 hover:bg-surface active:scale-95"
-  >
+    class=" xl:flex items-center gap-3 px-2 py-2 rounded-2xl cursor-pointer transition-all duration-200 hover:bg-white/5 hover:scale-[1.02] active:scale-95">
 
     <img
-      data-user-photo
-      src="assets/images/user-avatar.png"
-      class="h-9 w-9 rounded-full border border-line object-cover"
-      alt="Usuário"
-    >
-
+        src="assets/images/user-avatar.png"
+        class="   w-9 h-9 rounded-full border border-white/10 object-cover">
 
     <i
-      data-lucide="chevrons-right"
-      class="h-4 w-4 text-soft transition-transform duration-200"
-    ></i>
+        data-lucide="chevrons-right hidden"
+        class="w-4 h-4 text-slate-500 transition-transform duration-200">
+    </i>
 
-  </div>
-
-
-  <!-- NÃO LOGADO -->
-<a
-  href="./auth/"
-    data-auth="guest"
-  class="group relative inline-flex h-[42px] items-center no-underline"
->
-  <span
-    class="absolute inset-0 rounded-[11px] bg-[#0b2cff] -skew-x-[14deg]"
-  ></span>
-
-  <span class="relative z-10 flex h-full items-center gap-3 px-3">
-    <span class="text-[14px] font-light leading-none text-white">
-      Entrar
-    </span>
-
-    <span
-      class="flex h-[28px] w-[28px] shrink-0 items-center justify-center
-             rounded-[7px] bg-black"
-    >
-      <i data-lucide="arrow-up-right" class="h-4 w-4 stroke-[2]"></i>
-    </span>
-  </span>
-</a>
 </div>
-
-
+  </div>
+  <!-- Busca mobile -->
+  <div class="hidden pt-0 mt-3 ">
+    <input
+      class="input"
+      placeholder="Buscar torrents..."
+      >
+  </div>
+ <script>
+ 
+  </script>

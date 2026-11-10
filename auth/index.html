@@ -2,68 +2,56 @@
 <html lang="pt-BR">
 
 <head>
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Entrar — Portal OMDA</title>
+  <title>Login — VAHUB</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <script>
-
-    tailwind.config = {
-
-      theme: {
-
-        extend: {
-
-          fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif']
-          },
-
-          colors: {
-
-            ink: '#050505',
-            surface: '#101010',
-            line: '#242424',
-            soft: '#8A8A8A',
-            accent: '#013bff'
-
-          }
-
-        }
-
-      }
-
-    }
-
-  </script>
-
-  <script src="https://unpkg.com/lucide@latest"></script>
-
   <style>
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+      background: #171717;
     }
 
     body {
-      background: #050505;
+      min-height: 100vh;
+      overflow: hidden;
+      color: white;
     }
 
     ::selection {
-      background: #fff;
-      color: #000;
+      background: #ff3008;
+      color: white;
     }
+
+    /* =========================
+       BACKGROUND
+    ========================== */
 
     .background {
       position: fixed;
       inset: 0;
       z-index: 0;
+      background: #171717;
     }
 
     .background img {
@@ -79,76 +67,169 @@
       background:
         linear-gradient(
           rgba(0, 0, 0, .58),
-          rgba(0, 0, 0, .82)
+          rgba(0, 0, 0, .72)
         );
     }
 
-    .glass {
+    /* =========================
+       CONTAINER
+    ========================== */
 
-      background: rgba(16, 16, 16, .78);
+    .page {
+      position: relative;
+      z-index: 10;
 
-      backdrop-filter: blur(22px);
-      -webkit-backdrop-filter: blur(22px);
+      min-height: 100vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 24px;
     }
 
-    .input {
+    /* =========================
+       LOGIN
+    ========================== */
 
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+
+      padding: 32px;
+
+      background: rgba(23, 23, 23, .86);
+
+      border: 1px solid rgba(255, 255, 255, .10);
+
+      border-radius: 28px;
+
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, .40),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+    }
+
+    /* =========================
+       TITLE
+    ========================== */
+
+    .title {
+      margin-bottom: 28px;
+    }
+
+    .title h1 {
+      font-size: 28px;
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -.03em;
+    }
+
+    .title p {
+      margin-top: 8px;
+
+      font-size: 13px;
+      line-height: 1.5;
+
+      color: rgba(255, 255, 255, .42);
+    }
+
+    /* =========================
+       GOOGLE
+    ========================== */
+
+    .google-button {
       width: 100%;
       height: 52px;
 
-      padding: 0 16px;
+      border: 1px solid rgba(255, 255, 255, .10);
+      border-radius: 999px;
 
-      border: 1px solid rgba(255,255,255,.10);
-      border-radius: 14px;
+      background: rgba(255, 255, 255, .045);
 
-      outline: none;
-
-      background: rgba(255,255,255,.045);
       color: white;
 
-      font-size: 13px;
+      font-size: 12px;
+      font-weight: 600;
+
+      cursor: pointer;
 
       transition:
+        background .2s ease,
         border-color .2s ease,
-        background .2s ease;
+        transform .2s ease;
     }
 
-    .input::placeholder {
-      color: rgba(255,255,255,.30);
+    .google-button:hover {
+      background: rgba(255, 255, 255, .08);
+
+      border-color:
+        rgba(255, 255, 255, .16);
+
+      transform: translateY(-1px);
     }
 
-    .input:focus {
-
-      border-color: rgba(1,59,255,.7);
-
-      background: rgba(255,255,255,.07);
-    }
-
-    .button {
-
-      transition:
-        transform .2s ease,
-        opacity .2s ease,
-        background .2s ease;
-    }
-
-    .button:active {
-      transform: scale(.96);
-    }
-
-    .button:disabled {
-
+    .google-button:disabled {
       opacity: .5;
       cursor: wait;
+      transform: none;
     }
 
-  </style>
+    /* =========================
+       STATUS
+    ========================== */
 
+    #loginStatus {
+      min-height: 18px;
+
+      margin-top: 12px;
+
+      text-align: center;
+
+      font-size: 11px;
+
+      color: rgba(255, 255, 255, .35);
+    }
+
+    /* =========================
+       VERSION
+    ========================== */
+
+    .version {
+      margin-top: 26px;
+
+      text-align: center;
+
+      font-size: 9px;
+
+      color: rgba(255, 255, 255, .25);
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media (max-width: 520px) {
+
+      .page {
+        padding: 16px;
+      }
+
+      .login-card {
+        padding: 24px;
+        border-radius: 24px;
+      }
+
+      .title h1 {
+        font-size: 25px;
+      }
+    }
+  </style>
 </head>
 
-
-<body class="min-h-screen bg-ink font-sans text-white antialiased">
-
+<body>
 
   <!-- BACKGROUND -->
 
@@ -166,240 +247,57 @@
 
   <!-- PAGE -->
 
-  <main
-    class="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-8"
-  >
+  <main class="page">
 
+    <section class="login-card">
 
-    <!-- VOLTAR PARA O SITE -->
+      <!-- TITLE -->
 
-    <div class="mb-4 w-full max-w-[440px]">
+      <div class="title">
 
-      <a
-        href="../"
-        class="group inline-flex items-center gap-2 text-[11px] font-medium text-white/40 transition hover:text-white"
-      >
-
-        <i
-          data-lucide="arrow-left"
-          class="h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-x-0.5"
-        ></i>
-
-        <span>
-          Voltar para o site
-        </span>
-
-      </a>
-
-    </div>
-
-
-    <!-- CARD -->
-
-    <section
-      class="glass w-full max-w-[440px] rounded-[28px] border border-white/10 p-6 shadow-2xl sm:p-8"
-    >
-
-
-      <!-- HEADER -->
-
-      <div class="mb-7">
-
-        <div
-          class="mb-5 flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white text-black"
-        >
-
-          <i
-            data-lucide="log-in"
-            class="h-4 w-4"
-          ></i>
-
-        </div>
-
-
-        <h1
-          class="text-[28px] font-bold leading-tight tracking-[-.03em]"
-        >
+        <h1>
           Entrar na sua conta
         </h1>
 
-
-        <p
-          class="mt-2 text-[13px] leading-5 text-white/40"
-        >
-          Acesse sua conta para continuar no Portal OMDA.
+        <p>
+          Acesse sua conta para continuar.
         </p>
 
       </div>
 
 
-      <!-- FORM -->
-
-      <form
-        id="loginForm"
-        class="space-y-4"
-      >
-
-
-        <!-- EMAIL -->
-
-        <div>
-
-          <label
-            for="email"
-            class="mb-2 block text-[11px] font-medium text-white/45"
-          >
-            E-mail
-          </label>
-
-          <input
-            id="email"
-            type="email"
-            autocomplete="email"
-            placeholder="seu@email.com"
-            class="input"
-            required
-          >
-
-        </div>
-
-
-        <!-- SENHA -->
-
-        <div>
-
-          <label
-            for="password"
-            class="mb-2 block text-[11px] font-medium text-white/45"
-          >
-            Senha
-          </label>
-
-          <input
-            id="password"
-            type="password"
-            autocomplete="current-password"
-            placeholder="Sua senha"
-            class="input"
-            required
-          >
-
-        </div>
-
-
-        <!-- LOGIN -->
-
-        <button
-          id="loginButton"
-          type="submit"
-          class="button mt-2 flex h-[52px] w-full items-center justify-center gap-3 rounded-[14px] bg-accent text-[13px] font-semibold text-white hover:bg-blue-600 disabled:hover:bg-accent"
-        >
-
-          <span>
-            Entrar
-          </span>
-
-          <i
-            data-lucide="arrow-up-right"
-            class="h-4 w-4"
-          ></i>
-
-        </button>
-
-      </form>
-
-
-      <!-- GOOGLE -->
-
-      <div class="my-5 flex items-center gap-3">
-
-        <div class="h-px flex-1 bg-white/10"></div>
-
-        <span class="text-[10px] text-white/25">
-          ou
-        </span>
-
-        <div class="h-px flex-1 bg-white/10"></div>
-
-      </div>
-
+      <!-- GOOGLE LOGIN -->
 
       <button
         id="continueWithGoogle"
         type="button"
-        class="button flex h-[52px] w-full items-center justify-center gap-3 rounded-[14px] border border-white/10 bg-white/[.04] text-[13px] font-medium text-white transition hover:bg-white/[.08]"
+        class="google-button"
       >
-
-        <i
-          data-lucide="chrome"
-          class="h-4 w-4"
-        ></i>
-
-        <span>
-          Continuar com Google
-        </span>
-
+        Continuar com Google
       </button>
 
 
       <!-- STATUS -->
 
-      <p
-        id="loginStatus"
-        role="status"
-        aria-live="polite"
-        class="mt-4 min-h-[18px] text-center text-[11px] text-white/40"
-      ></p>
-
-
-      <!-- CADASTRO -->
-
-      <div
-        class="mt-6 border-t border-white/10 pt-6 text-center"
-      >
-
-        <span class="text-[12px] text-white/30">
-          Ainda não possui uma conta?
-        </span>
-
-        <a
-          href="./cadastro.html"
-          class="ml-1 text-[12px] font-medium text-white transition hover:text-accent"
-        >
-          Criar conta
-        </a>
-
-      </div>
+      <p id="loginStatus"></p>
 
 
       <!-- VERSION -->
 
-      <div
-        class="mt-6 text-center text-[9px] text-white/20"
-      >
-        PORTAL OMDA • v1.0.0
+      <div class="version">
+        VAHUB • v1.0.0
       </div>
-
 
     </section>
 
   </main>
 
 
-  <!-- LOGIN -->
+  <!-- CONTROLLER -->
 
   <script
     type="module"
-    src="./sysops.js?v=2.2.0"
-  ></script>
-
-
-  <!-- LUCIDE -->
-
-  <script>
-
-    lucide.createIcons();
-
+    src="./sysops.js?v=1.0.3">
   </script>
 
 </body>

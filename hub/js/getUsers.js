@@ -1,96 +1,222 @@
- 
-
 import {
     collection,
     getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import { db } from "../../firebase/config.js";
-console.log("22")
+
+
+console.log("Serviço de usuários carregado");
+
+
 async function carregarUsuarios() {
 
-    const usersList = document.getElementById("usersList");
+    const usersList =
+        document.getElementById("usersList");
+
     if (!usersList) {
         console.error("Elemento 'usersList' não encontrado.");
         return;
-    }else{
-        console.log("Elemento 'usersList' encontrado.");
-        
+    }
+
+    console.log("Elemento 'usersList' encontrado.");
+
     usersList.innerHTML = "";
 
-    const snapshot = await getDocs(collection(db, "users"));
 
-    snapshot.forEach((doc) => {
+    try {
 
-        const user = doc.data();
- 
- const inicial = (user.name || user.email).charAt(0).toUpperCase();
+        const snapshot = await getDocs(
+            collection(db, "conversations")
+        );
 
-usersList.innerHTML += `
-<tr class="hover:bg-white/5 transition">
 
-    <td class="px-6 py-4">
+        snapshot.forEach((document) => {
 
-        <div class="flex items-center gap-3">
+            const user = document.data();
 
-            <div class="w-10 h-10 rounded-xl bg-[#5864be] text-white flex items-center justify-center font-semibold">
-                ${inicial}
-            </div>
 
-            <span class="font-medium">
-                ${user.name}
-            </span>
+            const name =
+                user.name || "Visitante";
 
-        </div>
+            const email =
+                user.email || "Sem email";
 
-    </td>
+            const role =
+                user.role || "client";
 
-    <td class="px-6 py-4 text-zinc-400">
-        ${user.email}
-    </td>
+            const method =
+                user.method || "visitor";
 
-    <td class="px-6 py-4">
-        ${user.role}
-    </td>
+            const action =
+                user.action || "Sem intenção";
 
-    <td class="px-6 py-4">
-        ${user.downloads ?? 0}
-    </td>
 
-    <td class="px-6 py-4">
+            const inicial =
+                name
+                    .charAt(0)
+                    .toUpperCase();
 
-        <span class="px-3 py-1 rounded-full text-xs
-        ${user.status === "active"
-            ? "bg-green-500/20 text-green-400"
-            : "bg-red-500/20 text-red-400"}">
 
-            ${user.status}
+            let createdAt = "—";
 
-        </span>
+            if (user.createdAt?.toDate) {
 
-    </td>
+                createdAt =
+                    user.createdAt
+                        .toDate()
+                        .toLocaleString("pt-BR");
 
-    <td class="px-6 py-4">
+            }
 
-        <div class="flex justify-end gap-2">
 
-            <button class="px-3 py-2 rounded-lg bg-zinc-700 hover:bg-zinc-600">
-                Editar
-            </button>
+            usersList.innerHTML += `
 
-            <button class="px-3 py-2 rounded-lg bg-red-500/20 text-red-400 hover:bg-red-500/30">
-                Banir
-            </button>
+                <tr class="hover:bg-white/5 transition">
 
-        </div>
+                    <!-- USUÁRIO -->
 
-    </td>
+                    <td class="px-6 py-4">
 
-</tr>
-`;
-    });
+                        <div class="flex items-center gap-3">
+
+                            <div
+                                class="w-10 h-10 rounded-xl
+                                bg-[#5864be] text-white
+                                flex items-center justify-center
+                                font-semibold"
+                            >
+                                ${inicial}
+                            </div>
+
+                            <span class="font-medium">
+                                ${name}
+                            </span>
+
+                        </div>
+
+                    </td>
+
+
+                    <!-- EMAIL -->
+
+                    <td class="px-6 py-4 text-zinc-400">
+                        ${email}
+                    </td>
+
+
+                    <!-- ROLE -->
+
+                    <td class="px-6 py-4">
+
+                        <span
+                            class="
+                            px-3 py-1
+                            rounded-full
+                            text-xs
+                            ${role === "va"
+                                ? "bg-red-500/20 text-red-400"
+                                : "bg-zinc-700 text-zinc-300"}
+                            "
+                        >
+                            ${role}
+                        </span>
+
+                    </td>
+
+
+                    <!-- MÉTODO -->
+
+                    <td class="px-6 py-4 text-zinc-400">
+                        ${method}
+                    </td>
+
+
+                    <!-- INTENÇÃO -->
+
+                    <td class="px-6 py-4 text-zinc-300">
+                        ${action}
+                    </td>
+
+
+                    <!-- CADASTRO -->
+
+                    <td class="px-6 py-4 text-zinc-400 whitespace-nowrap">
+                        ${createdAt}
+                    </td>
+
+
+                    <!-- AÇÕES -->
+
+                    <td class="px-6 py-4">
+
+                        <div class="flex justify-end gap-2">
+
+                            <button
+                                class="
+                                px-3 py-2
+                                rounded-lg
+                                bg-zinc-700
+                                hover:bg-zinc-600
+                                "
+                            >
+                                Editar
+                            </button>
+
+
+                            <button
+                                class="
+                                px-3 py-2
+                                rounded-lg
+                                bg-red-500/20
+                                text-red-400
+                                hover:bg-red-500/30
+                                "
+                            >
+                                Banir
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Erro ao carregar conversations:",
+            error
+        );
+
+
+        usersList.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="px-6 py-8
+                    text-center
+                    text-red-400"
+                >
+                    Erro ao carregar usuários.
+                </td>
+
+            </tr>
+
+        `;
 
     }
+
 }
 
 
+export {
+    carregarUsuarios
+};

@@ -1,0 +1,999 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f5f2e9">
+<title>FisherCreator® — Catch the Extraordinary</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=DM+Sans:wght@400;500;600;700;800;900&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  color-scheme: light;
+  --paper: #f5f2e9;
+  --blue: #0751dc;
+  --pink: #f32e91;
+  --yellow: #ffe000;
+  --ink: #101010;
+  --cyan: #26c9f5;
+  --surface: #ebe7dc;
+  --muted: #66645e;
+  --border: #10101020;
+  --pattern: #11111114;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #101010;
+  --ink: #f5f2e9;
+  --surface: #1b1b1b;
+  --muted: #aaa69d;
+  --border: #ffffff20;
+  --pattern: #ffffff12;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  transition: background-color .45s, color .45s;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: .10;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--pink);
+  color: white;
+}
+
+.display {
+  font-family: 'Anton', sans-serif;
+  line-height: .81;
+  letter-spacing: -.045em;
+}
+
+.marker {
+  font-family: 'Permanent Marker', cursive;
+}
+
+.paper {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--pattern) .7px, transparent .7px);
+  background-size: 5px 5px;
+  transition: background-color .45s, color .45s;
+}
+
+.blue { background: var(--blue); }
+.pink { background: var(--pink); }
+
+.hero {
+  min-height: 100svh;
+  isolation: isolate;
+}
+
+.hero-layout {
+  min-height: calc(100svh - 90px);
+}
+
+.hero-title .line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: .035em;
+}
+
+.hero-title .line > span {
+  display: inline-block;
+  will-change: transform;
+}
+
+.hero-title .blue-word { color: var(--blue); }
+.hero-title .pink-word { color: var(--pink); }
+
+.hero-title .marker-word {
+  transform: rotate(-3deg);
+}
+
+.artwork {
+  isolation: isolate;
+  perspective: 1000px;
+}
+
+.art-photo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  clip-path: polygon(14% 1%, 100% 5%, 96% 92%, 7% 100%, 0 23%);
+}
+
+.art-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(1.3) contrast(1.08);
+  transform: scale(1.1);
+}
+
+.art-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #003ebc70, transparent 65%);
+  mix-blend-mode: multiply;
+}
+
+.sun {
+  width: clamp(210px, 27vw, 380px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--yellow);
+}
+
+.tentacle {
+  position: absolute;
+  width: 110%;
+  height: 110%;
+  inset: -5%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.sticker {
+  box-shadow: 5px 6px 0 #101010;
+  transition: transform .3s ease;
+}
+
+.sticker:hover {
+  transform: rotate(0deg) scale(1.07) !important;
+}
+
+.hand-arrow {
+  display: inline-block;
+  animation: arrowFloat 2s ease-in-out infinite;
+}
+
+@keyframes arrowFloat {
+  0%,100% { transform: translate(0,0) rotate(-5deg); }
+  50% { transform: translate(5px,-7px) rotate(5deg); }
+}
+
+.sun-spin {
+  animation: sunSpin 35s linear infinite;
+}
+
+@keyframes sunSpin {
+  to { transform: rotate(360deg); }
+}
+
+.float {
+  animation: float 5s ease-in-out infinite;
+}
+
+.float-reverse {
+  animation: float 7s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%,100% { translate: 0 0; }
+  50% { translate: 0 -13px; }
+}
+
+.nav-link {
+  position: relative;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  height: 2px;
+  background: var(--blue);
+  left: 0;
+  bottom: -7px;
+  width: 0;
+  transition: width .25s;
+}
+
+.nav-link:hover::after { width: 100%; }
+
+.cta {
+  position: relative;
+  isolation: isolate;
+  transition: transform .25s, box-shadow .25s;
+}
+
+.cta:hover {
+  box-shadow: 6px 6px 0 var(--ink);
+}
+
+.cta:active { transform: scale(.97); }
+
+/* THEME TOGGLE */
+
+.theme-toggle {
+  width: 43px;
+  height: 43px;
+  border: 1.5px solid var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: background .3s, color .3s, border-color .3s, transform .3s;
+}
+
+.theme-toggle:hover {
+  background: var(--yellow);
+  color: #101010;
+  border-color: var(--yellow);
+  transform: rotate(-12deg);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  transition: transform .4s;
+}
+
+.theme-toggle:active svg {
+  transform: rotate(45deg) scale(.8);
+}
+
+/* DARK THEME */
+
+:root[data-theme="dark"] .hero-header {
+  border-bottom: 1px solid var(--border);
+}
+
+:root[data-theme="dark"] .hero-header .cta {
+  background: var(--yellow);
+  color: #101010;
+  border-color: var(--yellow);
+}
+
+:root[data-theme="dark"] .hero-header .cta:hover {
+  box-shadow: 5px 5px 0 #f5f2e9;
+}
+
+:root[data-theme="dark"] .hero-description p {
+  color: #d0ccc3;
+}
+
+:root[data-theme="dark"] .hero-buttons > a:nth-child(2) {
+  color: var(--ink);
+}
+
+:root[data-theme="dark"] .hero-buttons > a:nth-child(2) span {
+  border-color: var(--ink);
+}
+
+:root[data-theme="dark"] .hero-buttons > a:nth-child(2):hover span {
+  border-color: var(--blue);
+}
+
+:root[data-theme="dark"] .hero-signature {
+  color: var(--ink);
+}
+
+:root[data-theme="dark"] .hero-bottom {
+  background: #050505;
+}
+
+:root[data-theme="dark"] .hero-bottom .text-white\/50 {
+  color: #888 !important;
+}
+
+:root[data-theme="dark"] .cursor-dot {
+  mix-blend-mode: difference;
+}
+
+:root[data-theme="dark"] .theme-toggle {
+  border-color: #f5f2e9;
+  color: #ffe000;
+}
+
+:root[data-theme="dark"] .theme-toggle:hover {
+  color: #101010;
+}
+
+.marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 23s linear infinite;
+}
+
+.marquee:hover { animation-play-state: paused; }
+
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+.cursor-dot {
+  width: 12px;
+  height: 12px;
+  background: var(--pink);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 200;
+  top: 0;
+  left: 0;
+  transform: translate(-50%,-50%);
+  mix-blend-mode: multiply;
+}
+
+.scroll-indicator {
+  animation: scrollDown 1.6s ease-in-out infinite;
+}
+
+@keyframes scrollDown {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* MOBILE MENU */
+
+.menu-overlay {
+  transition: opacity .35s, visibility .35s;
+}
+
+@media(max-width: 1023px) {
+  .hero-layout { min-height: auto; }
+}
+
+@media(max-width: 767px) {
+  .hero-title {
+    font-size: clamp(76px, 17vw, 145px);
+  }
+
+  .artwork { min-height: 520px; }
+
+  .art-photo {
+    clip-path: polygon(8% 0, 100% 4%, 95% 94%, 0 100%);
+  }
+
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media(prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+
+<!-- Aplicação antecipada do tema para evitar flash -->
+<script>
+try {
+  const saved = localStorage.getItem('fisher-theme');
+  const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.documentElement.dataset.theme = saved || (systemDark ? 'dark' : 'light'); 
+} catch {
+  document.documentElement.dataset.theme = 'light'; 
+}
+</script>
+</head>
+
+<body>
+
+<div id="app"></div>
+
+ 
+<script>
+const app = document.querySelector('#app');
+
+app.innerHTML = `
+
+<!-- HERO -->
+<main id="home"
+style="background-image:url('1bgd.png');background-size:cover;"
+class="hero relative paper overflow-hidden">
+
+  <!-- NAVIGATION -->
+  <header class="hero-header relative z-50 px-5 md:px-10 py-5">
+    <div class="max-w-[1600px] mx-auto flex justify-between items-center gap-4">
+
+      <a href="#home" class="group leading-none shrink-0">
+        <span class="block text-[26px] md:text-[30px] font-black tracking-[-2px]">
+          <img id="logobrand" src="logo-dark.png"
+            class="inline-block w-full translate-y-[1px] md:-translate-y-[2px]" alt="Logo">
+        </span>
+        <span class="hidden marker text-[#f32e91] text-sm leading-none">
+          CREATOR®
+        </span>
+      </a>
+
+      <nav class="hidden lg:flex gap-9 text-[11px] font-extrabold uppercase">
+        <a class="nav-link" href="#agencia">Agência</a>
+        <a class="nav-link" href="#servicos">Serviços</a>
+        <a class="nav-link" href="#projetos">Projetos</a>
+        <a class="nav-link" href="#insights">Insights</a>
+        <a class="nav-link" href="#contato">Contato</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+
+        <button id="themeToggle" class="theme-toggle" type="button"
+          aria-label="Ativar tema escuro" aria-pressed="false" title="Alternar tema">
+          <i data-lucide="moon" id="themeIcon"></i>
+        </button>
+
+        <a href="#contato"
+          class="cta hidden md:flex items-center gap-5 bg-black text-white px-6 py-4 text-[11px] uppercase font-bold">
+          Vamos criar
+          <i data-lucide="arrow-up-right" class="w-4 h-4 text-[#ffe000]"></i>
+        </a>
+
+        <button id="menuBtn"
+          class="lg:hidden w-11 h-11 bg-[#0751dc] text-white flex items-center justify-center"
+          aria-label="Abrir navegação" aria-expanded="false">
+          <i data-lucide="menu"></i>
+        </button>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div id="mobileNav"
+    class="menu-overlay fixed inset-0 z-[90] bg-[#0751dc] text-white invisible opacity-0 flex flex-col justify-center px-10">
+
+    <button id="closeMenu"
+      class="absolute top-7 right-7 w-12 h-12 border border-white/40 flex items-center justify-center"
+      aria-label="Fechar menu">
+      <i data-lucide="x"></i>
+    </button>
+
+    <span class="text-xs uppercase tracking-[.3em] text-[#ffe000] mb-8">
+      Explore the studio
+    </span>
+
+    <nav class="flex flex-col gap-5 display text-6xl md:text-8xl">
+      <a href="#agencia" class="menuLink hover:text-[#ffe000] transition">AGÊNCIA.</a>
+      <a href="#servicos" class="menuLink hover:text-[#ffe000] transition">SERVIÇOS.</a>
+      <a href="#projetos" class="menuLink hover:text-[#ffe000] transition">PROJETOS.</a>
+      <a href="#contato" class="menuLink hover:text-[#ffe000] transition">CONTATO.</a>
+    </nav>
+
+    <p class="mt-12 text-xs uppercase tracking-widest">FisherCreator® · Catch the extraordinary.</p>
+  </div>
+
+  <!-- HERO CONTENT -->
+  <section class="relative z-10 max-w-[1600px] mx-auto px-5 md:px-10">
+
+    <div class="hero-layout grid grid-cols-1 lg:grid-cols-[.94fr_1.06fr] items-center">
+
+      <div class="relative z-30 py-12 lg:py-8">
+
+        <div class="intro flex items-center gap-3 mb-8">
+          <span class="w-2.5 h-2.5 bg-[#f32e91] rounded-full"></span>
+          <span class="text-[10px] md:text-xs uppercase tracking-[.17em] font-extrabold">
+            Creative studio · Brazil
+          </span>
+        </div>
+
+        <h1 class="hero-title display text-[18vw] md:text-[15vw] lg:text-[8.8vw] uppercase">
+          <span class="line"><span>Criamos Marcas que</span></span>
+          <span class="line"><span class="blue-word">Movem.</span></span>
+        </h1>
+
+        <div class="hero-description mt-8 flex items-start gap-4 max-w-md">
+          <div class="w-1.5 h-[72px] bg-[#ffe000] shrink-0"></div>
+          <p class="text-sm md:text-base leading-relaxed font-medium">
+            Estratégia, design e tecnologia para criar marcas que não passam despercebidas.
+          </p>
+        </div>
+
+        <div class="hero-buttons flex flex-wrap gap-5 items-center mt-9">
+
+          <a href="#projetos"
+            class="cta magnetic inline-flex items-center gap-5 bg-[#ffe000] px-7 py-5 text-xs font-black uppercase border-2 border-black">
+            Explore projetos
+            <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+          </a>
+
+          <a href="#agencia" class="flex items-center gap-3 group text-xs font-bold uppercase">
+            <span class="w-12 h-12 border-2 border-black rounded-full flex items-center justify-center group-hover:bg-[#0751dc] group-hover:text-white transition">
+              <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+            </span>
+            Nossa<br>essência
+          </a>
+
+        </div>
+
+        <div class="hero-signature mt-12 flex items-center gap-8">
+          <div class="flex items-center gap-2">
+            <i data-lucide="globe" class="w-5 h-5 text-[#0751dc]"></i>
+            <span class="text-[9px] uppercase font-bold leading-tight">
+              Global thinking<br>Local heart
+            </span>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <i data-lucide="waves" class="w-5 h-5 text-[#f32e91]"></i>
+            <span class="text-[9px] uppercase font-bold leading-tight">
+              Feito por<br>pescadores de ideias
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VISUAL ART -->
+      <div id="artwork" class="hidden artwork relative min-h-[540px] md:min-h-[690px] flex items-center justify-center">
+
+        <div class="absolute inset-y-0 right-[-15vw] left-[-10vw] bg-[#0751dc] z-[-3]"></div>
+        <div class="sun sun-spin absolute top-[5%] right-[7%] z-[-1]"></div>
+
+        <div class="absolute top-[4%] left-[4%] text-white z-10">
+          <i data-lucide="cloud" class="w-24 h-24"></i>
+        </div>
+
+        <div class="art-photo z-10">
+          <img id="heroPhoto"
+            src="https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=1300&q=90"
+            alt="Surfista em uma onda, representando liberdade e cultura oceânica">
+        </div>
+
+        <svg id="tentacle" class="tentacle z-20"
+          viewBox="0 0 600 650" fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+
+          <path d="M390 55 C510 10 580 120 520 220 C465 305 570 350 505 455 C460 535 370 505 330 625"
+            stroke="#f32e91" stroke-width="66" stroke-linecap="round"/>
+
+          <path d="M390 55 C510 10 580 120 520 220 C465 305 570 350 505 455 C460 535 370 505 330 625"
+            stroke="#ffb1d5" stroke-width="39" stroke-linecap="round" stroke-dasharray="2 19"/>
+
+          <g fill="#ffe7f3" stroke="#a51b5e" stroke-width="3">
+            <ellipse cx="503" cy="150" rx="10" ry="16" transform="rotate(35 503 150)"/>
+            <ellipse cx="474" cy="213" rx="10" ry="16" transform="rotate(35 474 213)"/>
+            <ellipse cx="480" cy="278" rx="10" ry="16" transform="rotate(35 480 278)"/>
+            <ellipse cx="501" cy="343" rx="10" ry="16" transform="rotate(35 501 343)"/>
+            <ellipse cx="476" cy="415" rx="10" ry="16" transform="rotate(35 476 415)"/>
+            <ellipse cx="416" cy="485" rx="10" ry="16" transform="rotate(35 416 485)"/>
+          </g>
+        </svg>
+
+        <div class="absolute z-30 top-[12%] left-[5%] marker text-[#ffe000] text-7xl float">✳</div>
+        <div class="absolute z-30 bottom-[17%] left-[3%] marker text-[#26c9f5] text-7xl float-reverse">≋</div>
+
+        <div class="sticker absolute z-40 top-[13%] right-[-1%] bg-[#ffe000] text-black p-4 rotate-6">
+          <span class="marker text-lg leading-tight block">GOOD<br>VIBES<br>ONLY!</span>
+          <span class="text-[8px] font-bold uppercase">Fisher approved ✳</span>
+        </div>
+
+        <div class="sticker absolute z-40 bottom-[17%] right-[-2%] bg-[#0751dc] text-white p-4 -rotate-6">
+          <span class="marker text-xl block">CATCH THE<br>EXTRAORDINARY.</span>
+        </div>
+
+        <div class="absolute z-40 top-[3%] left-[39%] w-24 h-24 rounded-full border-2 border-dashed border-white text-white flex items-center justify-center rotate-12">
+          <div class="text-center">
+            <i data-lucide="globe" class="w-8 h-8 mx-auto"></i>
+            <span class="text-[7px] uppercase tracking-widest font-bold">Think global</span>
+          </div>
+        </div>
+
+        <div class="absolute z-40 bottom-[6%] left-[8%] marker text-white text-5xl rotate-[-12deg]">↗</div>
+
+        <div class="absolute z-40 right-[0%] top-[45%] bg-[#f32e91] text-white px-5 py-3 rotate-6">
+          <span class="text-[10px] uppercase font-black tracking-widest">Made of ideas.</span>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="relative z-40 overflow-hidden bg-[#ffe000] border-y-2 border-black py-5">
+    <div class="marquee marker text-3xl md:text-4xl uppercase">
+      ${Array(4).fill(`
+        <span class="mx-7">WE CATCH IDEAS</span>
+        <span class="text-[#0751dc] mx-4">✳</span>
+        <span class="mx-7">WE CREATE WAVES</span>
+        <span class="text-[#f32e91] mx-4">✳</span>
+        <span class="mx-7">WE MOVE BRANDS</span>
+        <span class="text-[#0751dc] mx-4">✳</span>
+      `).join('')}
+    </div>
+  </div>
+
+  <!-- HERO FOOTER -->
+  <div class="hero-bottom relative z-40 bg-[#101010] text-white">
+    <div class="max-w-[1600px] mx-auto px-5 md:px-10 py-6 flex items-center justify-between gap-5">
+
+      <div class="flex items-center gap-3">
+        <span class="w-2 h-2 rounded-full bg-[#f32e91] animate-pulse"></span>
+        <span class="text-[9px] md:text-xs uppercase tracking-[.2em] font-bold">
+          The ocean is our playground.
+        </span>
+      </div>
+
+      <div class="hidden sm:block text-[10px] uppercase tracking-widest text-white/50">
+        Independent by nature.
+      </div>
+
+      <a href="#servicos" class="scroll-indicator flex items-center gap-3 text-[9px] md:text-xs font-bold uppercase">
+        Keep exploring
+        <i data-lucide="arrow-down" class="w-4 h-4 text-[#ffe000]"></i>
+      </a>
+
+    </div>
+  </div>
+
+</main>
+`;
+
+
+// ------------------------------------------------
+// ICONS
+// ------------------------------------------------
+
+lucide.createIcons();
+
+
+// ------------------------------------------------
+// LIGHT / DARK THEME
+// ------------------------------------------------
+
+const themeToggle = document.querySelector('#themeToggle');
+const root = document.documentElement;
+
+function applyTheme(theme) {
+
+  root.dataset.theme = theme;
+
+  const isDark = theme === 'dark';
+
+  themeToggle.setAttribute('aria-pressed', String(isDark));
+  themeToggle.setAttribute(
+    'aria-label',
+    isDark ? 'Ativar tema claro' : 'Ativar tema escuro'
+  );
+
+  themeToggle.setAttribute(
+    'title',
+    isDark ? 'Mudar para Light Mode' : 'Mudar para Dark Mode'
+  );
+
+  themeToggle.innerHTML = `
+    <i data-lucide="${isDark ? 'sun' : 'moon'}"></i>
+  `;
+
+  // COR DA BARRA DO NAVEGADOR
+  document.querySelector('meta[name="theme-color"]')
+    ?.setAttribute('content', isDark ? '#101010' : '#f5f2e9');
+
+  // LOGO
+  document.getElementById('logobrand').src =
+    isDark ? 'logo-white.png' : 'logo-dark.png';
+
+  // BACKGROUND HOME
+  document.getElementById('home').style.backgroundImage =
+    isDark ? 'url("1bgd.png")' : 'url("bgl.png")';
+
+  // BACKGROUND HERO
+  const hero = document.querySelector('.hero-layout');
+
+  if (hero) {
+    hero.style.backgroundImage =
+      isDark ? 'url("hero-dark.png")' : 'url("hero-light.png")';
+    hero.style.backgroundSize = 'cover';
+    hero.style.backgroundPosition = 'center';
+  }
+
+  lucide.createIcons();
+
+  try {
+    localStorage.setItem('fisher-theme', theme);
+  } catch (error) {
+    console.warn('Não foi possível salvar a preferência de tema.');
+  }
+}
+
+// RESTAURAR TEMA SALVO
+let savedTheme = 'light';
+
+try {
+  savedTheme = localStorage.getItem('fisher-theme') || 'light';
+} catch (error) {
+  console.warn('Não foi possível recuperar a preferência de tema.');
+}
+
+applyTheme(savedTheme);
+
+themeToggle.addEventListener('click', () => {
+  const current = root.dataset.theme || 'light';
+  applyTheme(current === 'light' ? 'dark' : 'light');
+});
+
+
+// ------------------------------------------------
+// MOBILE NAVIGATION
+// ------------------------------------------------
+
+const menuBtn = document.querySelector('#menuBtn');
+const mobileNav = document.querySelector('#mobileNav');
+const closeMenu = document.querySelector('#closeMenu');
+
+function toggleMenu(open) {
+
+  mobileNav.classList.toggle('invisible', !open);
+  mobileNav.classList.toggle('opacity-0', !open);
+  mobileNav.classList.toggle('visible', open);
+  mobileNav.classList.toggle('opacity-100', open);
+
+  menuBtn.setAttribute('aria-expanded', String(open));
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+
+menuBtn.addEventListener('click', () => toggleMenu(true));
+closeMenu.addEventListener('click', () => toggleMenu(false));
+
+document.querySelectorAll('.menuLink').forEach(link => {
+  link.addEventListener('click', () => toggleMenu(false));
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') toggleMenu(false);
+});
+
+
+// ------------------------------------------------
+// GSAP ENTRANCE
+// ------------------------------------------------
+
+const reducedMotion = window.matchMedia(
+  '(prefers-reduced-motion: reduce)'
+).matches;
+
+if (window.gsap && !reducedMotion) {
+
+  gsap.set([
+    '.intro',
+    '.hero-description',
+    '.hero-buttons',
+    '.hero-title .line > span'
+  ], { opacity: 0 });
+
+  const tl = gsap.timeline({
+    defaults: { ease: 'power4.out' }
+  });
+
+  tl.from('header', {
+    y: -35,
+    opacity: 0,
+    duration: .8
+  })
+  .to('.intro', {
+    opacity: 1,
+    y: 0,
+    duration: .6
+  }, '-=.25')
+  .to('.hero-title .line > span', {
+    opacity: 1,
+    y: 0,
+    stagger: .13,
+    duration: .85
+  }, '-=.2')
+  .to('.hero-description', {
+    opacity: 1,
+    x: 0,
+    duration: .7
+  }, '-=.4')
+  .to('.hero-buttons', {
+    opacity: 1,
+    y: 0,
+    duration: .65
+  }, '-=.35')
+  .from('.art-photo', {
+    scale: .88,
+    opacity: 0,
+    duration: 1.3,
+    ease: 'power3.out'
+  }, '-=1')
+  .from('.sun', {
+    scale: .2,
+    opacity: 0,
+    duration: 1
+  }, '-=1')
+  .from('.sticker', {
+    scale: 0,
+    rotation: 30,
+    stagger: .2,
+    duration: .7
+  }, '-=.7');
+
+  gsap.to('.tentacle', {
+    rotation: 3,
+    yoyo: true,
+    repeat: -1,
+    duration: 4,
+    ease: 'sine.inOut',
+    transformOrigin: '50% 50%'
+  });
+
+} else {
+
+  document.querySelectorAll(
+    '.intro, .hero-description, .hero-buttons, .hero-title .line > span'
+  ).forEach(el => {
+    el.style.opacity = 1;
+  });
+}
+
+
+// ------------------------------------------------
+// MOUSE PARALLAX
+// ------------------------------------------------
+
+const artwork = document.querySelector('#artwork');
+const photo = document.querySelector('#heroPhoto');
+const tentacle = document.querySelector('#tentacle');
+const sun = document.querySelector('.sun');
+
+if (
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+  !reducedMotion &&
+  window.gsap
+) {
+
+  artwork.addEventListener('pointermove', e => {
+
+    const rect = artwork.getBoundingClientRect();
+
+    const x = (e.clientX - rect.left) / rect.width - .5;
+    const y = (e.clientY - rect.top) / rect.height - .5;
+
+    gsap.to(photo, {
+      x: x * -15,
+      y: y * -15,
+      duration: .7,
+      ease: 'power2.out'
+    });
+
+    gsap.to(tentacle, {
+      x: x * 12,
+      y: y * 12,
+      rotation: x * 2,
+      duration: .8,
+      ease: 'power2.out'
+    });
+
+    gsap.to(sun, {
+      x: x * -20,
+      y: y * -20,
+      duration: 1,
+      ease: 'power2.out'
+    });
+
+  });
+
+  artwork.addEventListener('pointerleave', () => {
+
+    gsap.to([photo, tentacle, sun], {
+      x: 0,
+      y: 0,
+      rotation: 0,
+      duration: 1,
+      ease: 'power3.out'
+    });
+
+  });
+
+}
+
+
+// ------------------------------------------------
+// MAGNETIC CTA
+// ------------------------------------------------
+
+if (!reducedMotion && window.gsap) {
+
+  document.querySelectorAll('.magnetic').forEach(button => {
+
+    button.addEventListener('pointermove', e => {
+
+      const rect = button.getBoundingClientRect();
+
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      gsap.to(button, {
+        x: x * .12,
+        y: y * .12,
+        duration: .3,
+        ease: 'power2.out'
+      });
+
+    });
+
+    button.addEventListener('pointerleave', () => {
+
+      gsap.to(button, {
+        x: 0,
+        y: 0,
+        duration: .5,
+        ease: 'elastic.out(1,.4)'
+      });
+
+    });
+
+  });
+
+}
+
+
+// ------------------------------------------------
+// CUSTOM CURSOR — DESKTOP
+// ------------------------------------------------
+
+if (
+  window.matchMedia('(hover: hover) and (pointer: fine)').matches &&
+  !reducedMotion &&
+  window.gsap
+) {
+
+  const cursor = document.createElement('div');
+
+  cursor.className = 'cursor-dot';
+  document.body.appendChild(cursor);
+
+  window.addEventListener('pointermove', e => {
+
+    gsap.to(cursor, {
+      x: e.clientX,
+      y: e.clientY,
+      duration: .2,
+      ease: 'power2.out'
+    });
+
+  });
+
+  document.querySelectorAll('a, button').forEach(el => {
+
+    el.addEventListener('mouseenter', () => {
+      gsap.to(cursor, { scale: 3, duration: .2 });
+    });
+
+    el.addEventListener('mouseleave', () => {
+      gsap.to(cursor, { scale: 1, duration: .2 });
+    });
+
+  });
+
+}
+
+</script>
+ 
+</body>
+</html>

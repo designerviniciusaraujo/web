@@ -78,7 +78,7 @@ export async function logout() {
         localStorage.removeItem("user");
         window.currentUser = null;
 
-        window.location.href = "/"; /// ajuste para sua rota
+        window.location.href = "/auth/"; /// ajuste para sua rota
 
     } catch (error) {
 

@@ -16,18 +16,14 @@ onAuthStateChanged(auth, (user)=>{
 
         // window.location.href =  "/auth/"
         console.log(  "Usuário Negado:" )
-                document.getElementById("headerContainer").innerHTML = " "
-
         return
 
     }
 
-         
 
     console.log(
         "Usuário logado:",
         user.email
-
     )
 
 

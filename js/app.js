@@ -1,16 +1,26 @@
 import {
     collection,
     getDocs,
+    updateDoc,
     query,
     orderBy,
-    onSnapshot
+    onSnapshot,
+    addDoc,
+    serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import { db } from "../firebase/config.js";
-import { logout } from "../services/sessionService.js";
-import { initAuthUI } from "./auth/authUI.js";
+import {
+    GoogleAuthProvider,
+    signInWithPopup
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-console.log('app loaded');
+
+
+const { db } = await import("../firebase/config.js");
+const { auth } = await import("../firebase/config.js");
+const { logout } = await import("../services/sessionService.js");
+
+console.log('rheme');
 function toggleTheme() {
 
     document.documentElement.classList.toggle("light");
@@ -90,16 +100,21 @@ function checkHeader() {
 checkHeader();
 window.addEventListener("resize", checkHeader);
 
-function initSwiper() {
+ function initSwiper() {
 
+    // =========================
     // HERO
-    const swiperElement = document.querySelector(".heroSwiper");
+    // =========================
 
-    if (swiperElement) {
+    const heroElement = document.querySelector(".heroSwiper");
+
+    if (heroElement) {
 
         const progress = document.querySelector(".timeline-progress");
 
         function restartProgress() {
+
+            if (!progress) return;
 
             progress.style.transition = "none";
             progress.style.width = "0%";
@@ -152,29 +167,63 @@ function initSwiper() {
 
     }
 
-    // LATEST
-    if (document.querySelector(".latestSwiper")) {
+
+    // =========================
+    // LATEST / PROJECTS
+    // =========================
+
+    const latestElement = document.querySelector(".latestSwiper");
+
+    if (latestElement) {
 
         new Swiper(".latestSwiper", {
 
-            loop: false, // importante
+            loop: true,
+
+            speed: 600,
 
             slidesPerView: 1.2,
 
-            spaceBetween: 20,
+            spaceBetween: 16,
+
+            grabCursor: true,
+
+            autoplay: {
+
+                delay: 4000,
+
+                disableOnInteraction: false,
+
+                pauseOnMouseEnter: true
+
+            },
 
             navigation: {
+
                 nextEl: ".latest-next",
+
                 prevEl: ".latest-prev"
+
             },
 
             breakpoints: {
+
                 640: {
-                    slidesPerView: 2.2
+
+                    slidesPerView: 2.2,
+
+                    spaceBetween: 16
+
                 },
+
                 1024: {
-                    slidesPerView: 4
+
+                    slidesPerView: 3,
+
+                    spaceBetween: 16
+
                 }
+
             }
 
         });
@@ -182,7 +231,6 @@ function initSwiper() {
     }
 
 }
-
 
 async function carregarUsuarios() {
 
@@ -285,7 +333,10 @@ async function include(id, file) {
     const html = await fetch(file).then(r => r.text());
 
     const el = document.getElementById(id);
-    el.innerHTML = html;
+
+    if(el){
+        el.innerHTML = html;
+    }
 }
 
 function bindNavigation() {
@@ -296,11 +347,7 @@ function bindNavigation() {
     });
 }
 
- 
 async function loadPage(page) {
-    const params = new URLSearchParams(window.location.search);
-    page = params.get("page") || page;
-
     try {
         const response = await fetch(`./pages/${page}.html`);
 
@@ -309,20 +356,30 @@ async function loadPage(page) {
         }
 
         const html = await response.text();
-        document.getElementById("content").innerHTML = html;
-        document.getElementById("sidebar").classList.toggle('collapsed');
-        carregarUsuarios();
+        var contentElement = document.getElementById("content");
+
+        if(contentElement){
+            contentElement.innerHTML = html;
+        } 
+        if(document.getElementById("sidebar")){
+            document.getElementById("sidebar").classList.toggle('collapsed');
+        }
+        carregarUsuarios()
+  
 
         if (window.lucide) {
             lucide.createIcons();
-            setActiveMenu(page);
+            setActiveMenu(page); 
         }
 
-        if (page === "home") {
-            requestAnimationFrame(() => {
-                initSwiper();
-            });
-        }
+         if(page === "home"){
+
+                requestAnimationFrame(() => {
+                    initSwiper();
+                });
+
+            }
+      
 
     } catch (error) {
         console.error(error);
@@ -334,13 +391,9 @@ async function loadPage(page) {
     }
 }
  
-
- 
  
 
 await include("header", "./componentes/header.html");
-initAuthUI();
-
 await include("footer", "./componentes/footer.html");
 await include("box-sidebar", "./componentes/sidebar.html");
 
@@ -471,10 +524,121 @@ function initLogout() {
     });
 
 }
+ 
+
+
+
+const googleProvider = new GoogleAuthProvider();
+
+const button =
+    document.getElementById("continueWithGoogle");
+
+
+button.addEventListener("click", async () => {
+
+    const telefone = "5512981053361";
+
+    // =========================================
+    // 1. TENTA LOGIN COM GOOGLE
+    // =========================================
+
+    try {
+
+        const result = await signInWithPopup(
+            auth,
+            googleProvider
+        );
+
+        const user = result.user;
+
+        // =====================================
+        // 2. GOOGLE FUNCIONOU → REGISTRA DADOS
+        // =====================================
+
+        await addDoc(
+            collection(db, "conversations"),
+            {
+                uid: user.uid,
+                name: user.displayName || "",
+                email: user.email || "",
+                role: "client",
+                authenticated: true,
+                method: "google",
+                action: "Falar sobre meu projeto agora",
+                page: window.location.pathname,
+                whatsappOpened: true,
+                createdAt: serverTimestamp()
+            }
+        );
+
+        console.log("Conversation Google registrada");
+
+        // =====================================
+        // 3. ABRE WHATSAPP
+        // =====================================
+
+        const name = user.displayName || "Olá";
+
+        const message =
+            `Sou ${name}. Quero falar sobre meu projeto.`;
+
+        window.location.href =
+            `https://wa.me/${telefone}?text=${encodeURIComponent(message)}`;
+
+
+    } catch (googleError) {
+
+        // =====================================
+        // 4. GOOGLE FALHOU → REGISTRA VISITANTE
+        // =====================================
+
+        console.error(
+            "Google login not completed:",
+            googleError
+        );
+
+        try {
+
+            await addDoc(
+                collection(db, "conversations"),
+                {
+                    uid: null,
+                    name: "",
+                    email: "",
+                    role: "client",
+                    authenticated: false,
+                    method: "visitor",
+                    action: "Falar sobre meu projeto agora",
+                    page: window.location.pathname,
+                    whatsappOpened: true,
+                    createdAt: serverTimestamp()
+                }
+            );
+
+            console.log("Conversation visitante registrada");
+
+        } catch (error) {
+
+            console.error(
+                "Error creating visitor conversation:",
+                error
+            );
+        }
+
+        // =====================================
+        // 5. ABRE WHATSAPP MESMO SEM GOOGLE
+        // =====================================
+
+        const message =
+            "Oii, Vinicius! Gostaria de falar sobre meu projeto.";
+
+        window.location.href =
+            `https://wa.me/${telefone}?text=${encodeURIComponent(message)}`;
+    }
+
+});
 loadNotifications();
 bindNavigation(); 
  initUserMenu();
 initLogout();
-
-window.loadPage = loadPage;
 window.toggleSidebar = toggleSidebar;

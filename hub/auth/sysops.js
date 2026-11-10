@@ -1,99 +1,76 @@
 import {
-    signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+signInWithEmailAndPassword
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"
+
 
 import {
-    doc,
-    getDoc
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-import {
-    auth,
-    db
-} from "../firebase/config.js";
+auth
+}
+from "../firebase/config.js"
 
 
-const form = document.getElementById("loginForm");
+
+const form =
+document.getElementById("loginForm")
 
 
-form.addEventListener("submit", async (e) => {
 
-    e.preventDefault();
-
-    const email =
-        document.getElementById("email").value;
-
-    const password =
-        document.getElementById("password").value;
+form.addEventListener(
+"submit",
+async(e)=>{
 
 
-    try {
-
-        // LOGIN
-        const result =
-            await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+e.preventDefault()
 
 
-        const uid = result.user.uid;
+
+const email =
+document.getElementById("email").value
 
 
-        localStorage.setItem("uid", uid);
+
+const password =
+document.getElementById("password").value
 
 
-        // BUSCA DADOS DO USUÁRIO
-        const userRef =
-            doc(db, "users", uid);
 
-        const userSnap =
-            await getDoc(userRef);
+try{
 
 
-        if (!userSnap.exists()) {
-
-            alert("Usuário não encontrado.");
-
-            return;
-
-        }
-
-
-        const userData =
-            userSnap.data();
-
-        const role =
-            userData.role;
+const result =
+await signInWithEmailAndPassword(
+auth,
+email,
+password
+)
 
 
-        // USUÁRIO COMUM
-        if (role === "user") {
 
-            window.location.href = "/";
-
-            return;
-
-        }
+localStorage.setItem(
+"uid",
+result.user.uid
+)
 
 
-        // ADMIN / SYSOPS / OUTROS
-        simularLogin();
-
-        setTimeout(() => {
-
-            window.location.href = "./";
-
-        }, 3000);
+    simularLogin() 
+       
+         setTimeout(() => {
+        window.location.href = "/";
+    }, 3000);
 
 
-    } catch (err) {
+}catch(err){
 
-        console.error(err);
 
-        alert("Login inválido");
+alert("Login inválido")
 
-    }
 
-});
+console.log(err)
+
+
+}
+
+
+
+})
