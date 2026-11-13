@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTA Online Ultimate Map</title>
+<meta name="description" content="Explore Los Santos. Encontre colecionáveis, tesouros e pontos de interesse em GTA Online.">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+:root {
+ --bg:#090c0b;
+ --panel:#121713;
+ --green:#c5ff55;
+ --muted:#a0aaa0;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+ margin:0;
+ background:var(--bg);
+ color:#fff;
+ font-family:Inter,sans-serif;
+}
+.container{width:min(1160px,calc(100% - 36px));margin:auto}
+header{
+ height:72px;
+ background:#090c0bea;
+ border-bottom:1px solid #ffffff15;
+ position:sticky;top:0;z-index:20;
+ backdrop-filter:blur(15px);
+}
+.logo{font-weight:900;letter-spacing:-1px}
+.logo span{color:var(--green)}
+.navlink{font-size:12px;color:#aab4aa}
+.btn{
+ display:inline-flex;align-items:center;justify-content:center;
+ background:var(--green);color:#101609;
+ font-size:12px;font-weight:900;letter-spacing:.5px;
+ padding:16px 23px;border-radius:5px;
+ transition:.2s;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 10px 30px #c5ff5530}
+.hero{
+ min-height:650px;
+ display:flex;align-items:center;
+ background:
+ linear-gradient(90deg,#080d09 0%,#080d09e8 40%,#080d0960 100%),
+ linear-gradient(0deg,#090c0b 0%,transparent 30%),
+ url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2000&q=85') center/cover;
+}
+.hero h1{
+ font-size:clamp(44px,7vw,82px);
+ font-weight:900;line-height:.94;
+ letter-spacing:-5px;
+ max-width:760px;
+}
+.green{color:var(--green)}
+.eyebrow{
+ color:var(--green);font-size:10px;font-weight:800;
+ letter-spacing:3px;text-transform:uppercase;
+}
+.muted{color:var(--muted)}
+.mapbox{
+ min-height:420px;
+ position:relative;overflow:hidden;
+ border:1px solid #60705a;
+ border-radius:9px;
+ background:
+ repeating-linear-gradient(35deg,transparent 0 37px,#d4e3b01a 38px 40px),
+ repeating-linear-gradient(115deg,transparent 0 53px,#d4e3b014 54px 56px),
+ radial-gradient(ellipse at 70% 25%,#a9a66a55,transparent 35%),
+ linear-gradient(140deg,#34523a,#1b382a 50%,#17261d);
+}
+.mapbox:after{
+ content:"";position:absolute;inset:0;
+ background:linear-gradient(90deg,#07110c55,transparent);
+}
+.maplabel{
+ position:absolute;z-index:2;font-size:10px;
+ letter-spacing:2px;color:#e4ecd8;
+ text-shadow:0 2px 8px #000;
+}
+.pin{
+ position:absolute;z-index:3;
+ width:18px;height:18px;border-radius:50%;
+ background:var(--green);border:4px solid white;
+ box-shadow:0 0 0 9px #c5ff5533,0 0 25px var(--green);
+}
+section{padding:90px 0}
+.section-title{
+ font-size:clamp(30px,4vw,48px);
+ line-height:1.05;letter-spacing:-2px;font-weight:900;
+}
+.card{
+ background:linear-gradient(145deg,#172019,#101511);
+ border:1px solid #354237;
+ padding:25px;border-radius:8px;
+ transition:.25s;
+}
+.card:hover{transform:translateY(-5px);border-color:#c5ff5580}
+.card-icon{
+ width:44px;height:44px;display:grid;place-items:center;
+ background:#c5ff5518;color:var(--green);
+ border-radius:8px;font-size:21px;margin-bottom:22px;
+}
+.card h3{font-size:17px;font-weight:800;margin-bottom:9px}
+.card p{font-size:13px;color:#a4afa2;line-height:1.7}
+.product{
+ background:radial-gradient(circle at 80% 20%,#c5ff5517,transparent 40%),#121a14;
+ border:1px solid #526047;border-radius:12px;padding:35px;
+}
+.price{font-size:48px;font-weight:900;letter-spacing:-2px}
+.oldprice{text-decoration:line-through;color:#859184;font-size:15px}
+.check{padding:11px 0;border-bottom:1px solid #ffffff12;font-size:14px;color:#dce4d8}
+.check:before{content:"✓";color:var(--green);font-weight:900;margin-right:12px}
+.faq{border-top:1px solid #344034;padding:20px 0}
+summary{cursor:pointer;font-weight:700;font-size:14px}
+details p{color:#a0aaa0;font-size:13px;margin-top:12px}
+footer{border-top:1px solid #ffffff15;padding:30px 0;color:#879287;font-size:11px}
+@media(max-width:768px){
+ header{height:62px}
+ .hero{min-height:620px;background-position:60% center}
+ .hero h1{letter-spacing:-3px}
+ section{padding:65px 0}
+ .mapbox{min-height:320px}
+ .product{padding:24px}
+ .desktop-nav{display:none}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="container h-full flex items-center justify-between">
+  <a href="#" class="logo text-lg">GTA ONLINE<span>.</span> MAP</a>
+
+  <nav class="desktop-nav flex gap-8">
+   <a class="navlink" href="#recursos">Recursos</a>
+   <a class="navlink" href="#mapa">O mapa</a>
+   <a class="navlink" href="#oferta">Oferta</a>
+  </nav>
+
+  <a href="#oferta" class="btn !py-3 !px-4">ACESSAR MAPA ↗</a>
+ </div>
+</header>
+
+<main>
+
+<!-- HERO -->
+
+<section class="hero">
+ <div class="container">
+  <div class="max-w-3xl">
+   <div class="eyebrow mb-6">ULTIMATE MAP / DIGITAL EDITION</div>
+
+   <h1>
+    LOS SANTOS<br>
+    <span class="green">NÃO TEM</span><br>
+    SEGREDOS.
+   </h1>
+
+   <p class="muted text-base md:text-lg max-w-xl mt-7 leading-relaxed">
+    Descubra colecionáveis, tesouros e pontos de interesse.
+    Tenha um guia visual para explorar GTA Online com muito mais facilidade.
+   </p>
+
+   <div class="flex flex-wrap gap-3 mt-9">
+    <a href="#oferta" class="btn">QUERO MEU MAPA ↗</a>
+    <a href="#mapa" class="btn !bg-transparent !text-white border border-white/30">
+     EXPLORAR DEMONSTRAÇÃO
+    </a>
+   </div>
+
+   <div class="flex flex-wrap gap-5 mt-8 text-xs text-gray-400">
+    <span>✓ Produto digital</span>
+    <span>✓ Acesso online</span>
+    <span>✓ Mobile friendly</span>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- MAPA -->
+
+<section id="mapa">
+ <div class="container">
+  <div class="grid md:grid-cols-2 gap-12 items-center">
+
+   <div>
+    <div class="eyebrow mb-4">EXPLORE O MUNDO</div>
+    <h2 class="section-title">
+     Tudo em um só<br>
+     <span class="green">lugar.</span>
+    </h2>
+
+    <p class="muted mt-6 leading-relaxed">
+     Pare de procurar informações em dezenas de páginas.
+     Consulte seu guia e organize suas explorações em Los Santos.
+    </p>
+
+    <div class="mt-8 space-y-4 text-sm">
+     <div>⌖ Localizações organizadas</div>
+     <div>◈ Categorias de exploração</div>
+     <div>⌕ Consulta rápida</div>
+    </div>
+
+    <a href="#oferta" class="btn mt-9">QUERO EXPLORAR ↗</a>
+   </div>
+
+   <div class="mapbox">
+    <span class="maplabel" style="top:18%;left:12%">VINEWOOD</span>
+    <span class="maplabel" style="top:40%;right:12%">LOS SANTOS</span>
+    <span class="maplabel" style="bottom:20%;left:20%">SANDY SHORES</span>
+    <span class="maplabel" style="bottom:15%;right:13%">PALETO BAY</span>
+    <i class="pin" style="top:40%;left:54%"></i>
+    <i class="pin" style="top:65%;left:27%;background:#f4c76a"></i>
+    <i class="pin" style="top:25%;left:75%;background:#65d9ef"></i>
+    <div class="absolute bottom-4 left-4 z-10 bg-black/80 px-4 py-3 rounded text-xs tracking-widest">
+     WORLD MAP / PREVIEW
+    </div>
+   </div>
+
+  </div>
+ </div>
+</section>
+
+<!-- RECURSOS -->
+
+<section id="recursos" style="background:#0d130f">
+ <div class="container">
+  <div class="max-w-2xl mb-12">
+   <div class="eyebrow mb-4">SEU GUIA DE EXPLORAÇÃO</div>
+   <h2 class="section-title">Encontre o que procura.<br><span class="green">Mais rápido.</span></h2>
+   <p class="muted mt-5">Uma experiência organizada para quem quer aproveitar melhor cada sessão de jogo.</p>
+  </div>
+
+  <div class="grid md:grid-cols-3 gap-4">
+
+   <article class="card">
+    <div class="card-icon">⌖</div>
+    <h3>Colecionáveis</h3>
+    <p>Consulte localizações de itens colecionáveis e descubra o que ainda falta encontrar.</p>
+   </article>
+
+   <article class="card">
+    <div class="card-icon">◈</div>
+    <h3>Tesouros e segredos</h3>
+    <p>Organize sua exploração de locais especiais e pontos escondidos.</p>
+   </article>
+
+   <article class="card">
+    <div class="card-icon">⌕</div>
+    <h3>Pontos de interesse</h3>
+    <p>Consulte regiões e locais importantes em um guia visual organizado.</p>
+   </article>
+
+  </div>
+ </div>
+</section>
+
+<!-- OFERTA -->
+
+<section id="oferta">
+ <div class="container">
+  <div class="product grid md:grid-cols-2 gap-12 items-center">
+
+   <div>
+    <div class="eyebrow mb-4">ACESSO DIGITAL</div>
+
+    <h2 class="section-title">
+     GTA ONLINE<br>
+     <span class="green">ULTIMATE MAP</span>
+    </h2>
+
+    <p class="muted mt-5">
+     Seu guia digital de exploração de Los Santos.
+     Consulte os materiais no computador ou celular.
+    </p>
+
+    <div class="mt-7">
+     <div class="check">Mapa de referência digital</div>
+     <div class="check">Índice de colecionáveis</div>
+     <div class="check">Tesouros e pontos especiais</div>
+     <div class="check">Regiões organizadas</div>
+     <div class="check">Consulta adaptada para celular</div>
+    </div>
+   </div>
+
+   <div class="bg-black/30 rounded-lg p-7 border border-white/10">
+    <div class="eyebrow">OFERTA ESPECIAL</div>
+
+    <div class="mt-5">
+     <span class="oldprice">R$ 29,90</span>
+     <div class="price">R$ 19,90</div>
+     <span class="muted text-xs">Pagamento único</span>
+    </div>
+
+    <!-- SUBSTITUIR PELO LINK DO PRODUTO SHOPIFY -->
+    <a
+     href="/cart/ID_DO_PRODUTO:1"
+     class="btn w-full mt-7"
+     id="buyButton">
+     COMPRAR AGORA ↗
+    </a>
+
+    <div class="text-center text-xs text-gray-500 mt-5">
+     🔒 Pagamento pelo checkout seguro Shopify
+    </div>
+
+    <div class="text-center text-xs text-gray-500 mt-3">
+     Produto digital • Sem frete
+    </div>
+   </div>
+
+  </div>
+ </div>
+</section>
+
+<!-- FAQ -->
+
+<section style="background:#0d130f">
+ <div class="container max-w-3xl">
+  <div class="eyebrow mb-4">DÚVIDAS FREQUENTES</div>
+  <h2 class="section-title mb-9">Antes de comprar.</h2>
+
+  <details class="faq">
+   <summary>O produto é o próprio GTA V?</summary>
+   <p>Não. É um guia digital independente. O jogo não está incluído.</p>
+  </details>
+
+  <details class="faq">
+   <summary>Posso consultar pelo celular?</summary>
+   <p>Sim. A experiência foi pensada para telas de celular e computador.</p>
+  </details>
+
+  <details class="faq">
+   <summary>Como recebo meu produto?</summary>
+   <p>O acesso deve ser disponibilizado digitalmente após a confirmação do pagamento pela Shopify.</p>
+  </details>
+
+  <details class="faq">
+   <summary>É um produto oficial da Rockstar?</summary>
+   <p>Não. É um produto independente, sem afiliação ou endosso da Rockstar Games.</p>
+  </details>
+
+ </div>
+</section>
+
+</main>
+
+<footer>
+ <div class="container flex flex-col md:flex-row justify-between gap-4">
+  <div>© 2026 GTA ONLINE MAP. Produto digital independente.</div>
+  <div>Não afiliado à Rockstar Games ou Take-Two Interactive.</div>
+ </div>
+</footer>
+
+</body>
+</html>
