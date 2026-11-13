@@ -1,0 +1,445 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f8f5f1">
+<title>BEAUTÉ — Descubra sua melhor versão</title>
+<meta name="description" content="Descubra sua rotina de beleza com produtos selecionados. Encontre seus favoritos na BEAUTÉ.">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#f8f5f1;
+--white:#fff;
+--text:#29231f;
+--muted:#82766f;
+--accent:#bd806f;
+--soft:#eee5df;
+--line:#e9e2dc;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+button,a{cursor:pointer}
+img{display:block;width:100%;height:100%;object-fit:cover}
+.container{width:min(1160px,90%);margin:auto}
+.serif{font-family:'Playfair Display',serif}
+.announcement{background:#29231f;color:white;text-align:center;padding:10px;font-size:10px;letter-spacing:1.1px}
+.header{position:sticky;top:0;z-index:30;background:#f8f5f1ed;backdrop-filter:blur(15px);border-bottom:1px solid var(--line)}
+.header-inner{height:70px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Playfair Display',serif;font-size:26px;font-weight:600;letter-spacing:3px;text-decoration:none;color:inherit}
+.nav{display:flex;gap:28px}
+.nav a{text-decoration:none;color:var(--text);font-size:11px}
+.actions{display:flex;align-items:center;gap:15px}
+.icon-btn{border:0;background:none;position:relative}
+.hero{min-height:650px;height:calc(100svh - 100px);max-height:790px;position:relative;overflow:hidden;background:#b5a69e}
+.hero>img{object-position:center 40%}
+.hero:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(30,23,20,.66),rgba(30,23,20,.08) 85%)}
+.hero-content{position:absolute;z-index:2;top:50%;left:10%;transform:translateY(-50%);max-width:540px;color:white}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(48px,6vw,82px);font-weight:500;line-height:.99;margin:20px 0}
+.hero p{font-size:14px;line-height:1.9;max-width:390px;color:#f5eae5}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;background:var(--text);color:white;border:1px solid var(--text);padding:17px 28px;font-size:10px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;text-decoration:none;transition:.2s}
+.btn:hover{background:var(--accent);border-color:var(--accent)}
+.btn-white{background:white;color:var(--text);border-color:white}
+.btn-white:hover{color:white}
+.section{padding:85px 0}
+.heading{text-align:center;margin-bottom:38px}
+.heading .eyebrow{color:var(--accent)}
+.heading h2{font-family:'Playfair Display',serif;font-size:clamp(32px,4vw,48px);font-weight:500;margin:12px 0}
+.heading p{font-size:12px;color:var(--muted);line-height:1.8}
+.benefit-strip{background:white;border-bottom:1px solid var(--line)}
+.benefits{display:grid;grid-template-columns:repeat(4,1fr);padding:20px 0}
+.benefit{display:flex;justify-content:center;align-items:center;gap:12px;padding:5px;border-right:1px solid var(--line)}
+.benefit:last-child{border:0}
+.benefit i{color:var(--accent)}
+.benefit strong{font-size:10px;display:block}
+.benefit span{font-size:9px;color:var(--muted)}
+.categories{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.category{position:relative;aspect-ratio:.82;overflow:hidden}
+.category img{transition:.5s}
+.category:hover img{transform:scale(1.05)}
+.category:after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,#0008)}
+.category-label{position:absolute;z-index:2;bottom:20px;left:17px;color:white}
+.category-label h3{font-family:'Playfair Display',serif;font-size:25px;font-weight:500;margin:0 0 5px}
+.category-label span{font-size:9px;letter-spacing:1px}
+.offer{background:#eee5df;display:grid;grid-template-columns:1fr 1fr;min-height:430px}
+.offer-image{min-height:430px}
+.offer-content{padding:65px 12%;display:flex;flex-direction:column;justify-content:center}
+.offer-content h2{font-family:'Playfair Display',serif;font-size:clamp(35px,4vw,54px);font-weight:500;line-height:1.08;margin:16px 0}
+.offer-content p{font-size:13px;color:var(--muted);line-height:1.9}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:17px}
+.product-image{position:relative;aspect-ratio:.82;background:var(--soft);overflow:hidden}
+.product-image img{transition:.4s}
+.product:hover img{transform:scale(1.04)}
+.product-tag{position:absolute;top:12px;left:12px;background:white;padding:7px 10px;font-size:9px;text-transform:uppercase}
+.product-info{padding:13px 0}
+.product-info h3{font-size:12px;font-weight:600;margin:0 0 6px}
+.product-info p{font-size:10px;color:var(--muted);margin:0}
+.price-row{display:flex;align-items:center;gap:8px;margin-top:12px}
+.price{font-size:14px;font-weight:700}
+.old-price{font-size:11px;color:#a99e96;text-decoration:line-through}
+.discount{font-size:9px;color:#47795d;font-weight:700}
+.buy-btn{width:100%;background:var(--text);color:white;border:0;padding:14px;margin-top:12px;font-size:10px;font-weight:700;letter-spacing:.8px}
+.buy-btn:hover{background:var(--accent)}
+.kit{background:#29231f;color:white;display:grid;grid-template-columns:1fr 1fr;min-height:470px}
+.kit-image{min-height:470px}
+.kit-content{padding:60px 12%;display:flex;flex-direction:column;justify-content:center}
+.kit-content h2{font-family:'Playfair Display',serif;font-size:clamp(38px,4vw,55px);line-height:1.1;font-weight:500}
+.kit-content p{color:#d0c2b9;font-size:12px;line-height:1.9}
+.kit-price{display:flex;align-items:center;gap:12px;margin:14px 0}
+.kit-price strong{font-size:25px}
+.kit-price del{font-size:13px;color:#b2a69f}
+.reviews{background:white}
+.review-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
+.review{background:var(--bg);padding:26px}
+.stars{color:#bd806f;letter-spacing:3px;font-size:13px}
+.review p{font-size:12px;line-height:1.9;color:#6f655e}
+.review strong{font-size:11px}
+.verified{font-size:9px;color:#59846a;margin-top:7px}
+.story{display:grid;grid-template-columns:1fr 1fr;gap:65px;align-items:center}
+.story-image{height:500px}
+.story-content h2{font-family:'Playfair Display',serif;font-size:clamp(37px,4vw,53px);font-weight:500;line-height:1.12}
+.story-content p{font-size:13px;line-height:2;color:var(--muted)}
+.faq{max-width:760px;margin:auto}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-question{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;background:none;border:0;padding:20px 0;font-size:12px;font-weight:600}
+.faq-answer{display:none;color:var(--muted);font-size:12px;line-height:1.9;padding:0 0 20px}
+.faq-item.open .faq-answer{display:block}
+.newsletter{background:#eee5df;text-align:center;padding:75px 20px}
+.newsletter h2{font-family:'Playfair Display',serif;font-size:40px;font-weight:500}
+.newsletter p{font-size:12px;color:var(--muted)}
+.newsletter form{display:flex;max-width:430px;margin:25px auto 0}
+.newsletter input{flex:1;min-width:0;border:1px solid #d9ccc3;padding:15px;background:white;outline:none;font-size:12px}
+.newsletter button{border:0;background:var(--text);color:white;padding:0 22px;font-size:10px}
+.footer{background:#29231f;color:white;padding:55px 0 25px}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:35px}
+.footer h3{font-family:'Playfair Display',serif;font-size:26px}
+.footer h4{font-size:10px;letter-spacing:1px}
+.footer p,.footer a{font-size:11px;color:#c5bcb5;line-height:2;text-decoration:none;display:block}
+.footer-bottom{border-top:1px solid #514740;margin-top:35px;padding-top:20px;font-size:10px;color:#b9aea5}
+.cart-panel{position:fixed;inset:0;background:#0008;z-index:70;display:none;justify-content:flex-end}
+.cart-panel.open{display:flex}
+.cart{width:min(420px,100%);height:100%;background:white;padding:25px;display:flex;flex-direction:column}
+.cart-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:20px}
+.cart-items{flex:1;overflow:auto;padding:15px 0}
+.cart-row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:13px 0;font-size:12px}
+.cart-total{display:flex;justify-content:space-between;font-weight:700;padding:20px 0}
+.mobile-cta{display:none}
+@media(max-width:760px){
+.container{width:90%}
+.header-inner{height:62px}
+.nav{display:none}
+.logo{font-size:23px}
+.hero{height:670px;min-height:0}
+.hero>img{object-position:58% center}
+.hero:after{background:linear-gradient(0deg,rgba(30,23,20,.75),rgba(30,23,20,.08) 100%)}
+.hero-content{top:auto;bottom:45px;left:7%;right:7%;transform:none}
+.hero h1{font-size:53px}
+.hero p{font-size:12px}
+.section{padding:60px 0}
+.benefits{grid-template-columns:repeat(2,1fr);gap:12px}
+.benefit{justify-content:flex-start;border:0}
+.benefit strong{font-size:9px}
+.categories{grid-template-columns:repeat(2,1fr);gap:10px}
+.category-label h3{font-size:21px}
+.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:17px 10px}
+.offer,.kit,.story{grid-template-columns:1fr}
+.offer-image,.kit-image{height:310px;min-height:0}
+.offer-content,.kit-content{padding:40px 8%}
+.kit-content{padding:45px 8%}
+.review-grid{grid-template-columns:1fr}
+.story{gap:25px}
+.story-image{height:350px}
+.newsletter h2{font-size:33px}
+.footer-grid{grid-template-columns:1fr 1fr;gap:25px}
+.footer-brand{grid-column:span 2}
+.mobile-cta{display:block;position:fixed;bottom:0;left:0;right:0;padding:10px 15px calc(10px + env(safe-area-inset-bottom));background:white;border-top:1px solid var(--line);z-index:25}
+.mobile-cta a{display:flex;justify-content:center;align-items:center;background:var(--text);color:white;text-decoration:none;padding:15px;font-size:11px;font-weight:700;letter-spacing:1px}
+body{padding-bottom:65px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="announcement" data-pt="FRETE GRÁTIS A PARTIR DE R$199 • SUA BELEZA MERECE" data-en="FREE SHIPPING ON ORDERS OVER $100 • YOUR BEAUTY DESERVES IT">
+FRETE GRÁTIS A PARTIR DE R$199 • SUA BELEZA MERECE
+</div>
+
+<header class="header">
+<div class="container header-inner">
+<a href="#" class="logo">BEAUTÉ.</a>
+<nav class="nav">
+<a href="#categorias" data-pt="Categorias" data-en="Categories">Categorias</a>
+<a href="#mais-vendidos" data-pt="Mais vendidos" data-en="Best sellers">Mais vendidos</a>
+<a href="#oferta" data-pt="Ofertas" data-en="Offers">Ofertas</a>
+<a href="#sobre" data-pt="Nossa marca" data-en="Our story">Nossa marca</a>
+</nav>
+<div class="actions">
+<button class="icon-btn" onclick="toggleLanguage()">EN / PT</button>
+<button class="icon-btn" onclick="toggleCart()">
+<i data-lucide="shopping-bag"></i>
+<span id="cart-count">0</span>
+</button>
+</div>
+</div>
+</header>
+
+<main>
+
+<!-- HERO: OFERTA PRINCIPAL -->
+<section class="hero">
+<img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1800&q=90" alt="Coleção de beleza BEAUTÉ">
+<div class="hero-content">
+<div class="eyebrow" data-pt="SUA NOVA ROTINA COMEÇA AQUI" data-en="YOUR NEW ROUTINE STARTS HERE">SUA NOVA ROTINA COMEÇA AQUI</div>
+<h1 data-pt="Você merece<br>esse cuidado." data-en="You deserve<br>this care.">Você merece<br>esse cuidado.</h1>
+<p data-pt="Descubra produtos selecionados para transformar sua rotina de beleza em um momento que é só seu." data-en="Discover carefully selected products to turn your beauty routine into a moment of your own.">Descubra produtos selecionados para transformar sua rotina de beleza em um momento que é só seu.</p>
+<a href="#mais-vendidos" class="btn btn-white">
+<span data-pt="ENCONTRE SEU FAVORITO" data-en="FIND YOUR FAVORITE">ENCONTRE SEU FAVORITO</span>
+<i data-lucide="arrow-right" size="15"></i>
+</a>
+</div>
+</section>
+
+<!-- BENEFÍCIOS -->
+<div class="benefit-strip">
+<div class="container benefits">
+<div class="benefit"><i data-lucide="truck" size="22"></i><div><strong data-pt="Entrega para todo Brasil" data-en="Nationwide delivery">Entrega para todo Brasil</strong><span data-pt="Consulte condições" data-en="See conditions">Consulte condições</span></div></div>
+<div class="benefit"><i data-lucide="shield-check" size="22"></i><div><strong data-pt="Compra segura" data-en="Secure shopping">Compra segura</strong><span data-pt="Seus dados protegidos" data-en="Your data protected">Seus dados protegidos</span></div></div>
+<div class="benefit"><i data-lucide="credit-card" size="22"></i><div><strong data-pt="Pagamento facilitado" data-en="Easy payments">Pagamento facilitado</strong><span data-pt="Confira as opções" data-en="See payment options">Confira as opções</span></div></div>
+<div class="benefit"><i data-lucide="heart" size="22"></i><div><strong data-pt="Escolhido com carinho" data-en="Carefully selected">Escolhido com carinho</strong><span data-pt="Cada detalhe importa" data-en="Every detail matters">Cada detalhe importa</span></div></div>
+</div>
+</div>
+
+<!-- CATEGORIAS -->
+<section class="section" id="categorias">
+<div class="container">
+<div class="heading">
+<div class="eyebrow">BEAUTÉ COLLECTION</div>
+<h2 data-pt="Seu ritual começa aqui." data-en="Your ritual starts here.">Seu ritual começa aqui.</h2>
+<p data-pt="Explore nossas categorias e encontre o que combina com você." data-en="Explore our categories and find what suits you.">Explore nossas categorias e encontre o que combina com você.</p>
+</div>
+<div class="categories">
+<a class="category" href="#mais-vendidos"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=700&q=85" alt="Maquiagem"><div class="category-label"><h3 data-pt="Maquiagem" data-en="Makeup">Maquiagem</h3><span data-pt="EXPLORAR →" data-en="EXPLORE →">EXPLORAR →</span></div></a>
+<a class="category" href="#mais-vendidos"><img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=700&q=85" alt="Skincare"><div class="category-label"><h3>Skincare</h3><span data-pt="EXPLORAR →" data-en="EXPLORE →">EXPLORAR →</span></div></a>
+<a class="category" href="#mais-vendidos"><img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=85" alt="Perfumes"><div class="category-label"><h3 data-pt="Perfumes" data-en="Fragrance">Perfumes</h3><span data-pt="EXPLORAR →" data-en="EXPLORE →">EXPLORAR →</span></div></a>
+<a class="category" href="#mais-vendidos"><img src="https://images.unsplash.com/photo-1600612253971-422e7f7faeb6?auto=format&fit=crop&w=700&q=85" alt="Corpo e banho"><div class="category-label"><h3 data-pt="Corpo & Banho" data-en="Body & Bath">Corpo & Banho</h3><span data-pt="EXPLORAR →" data-en="EXPLORE →">EXPLORAR →</span></div></a>
+</div>
+</div>
+</section>
+
+<!-- PRODUTOS -->
+<section class="section" id="mais-vendidos" style="background:white">
+<div class="container">
+<div class="heading">
+<div class="eyebrow" data-pt="OS FAVORITOS" data-en="CUSTOMER FAVORITES">OS FAVORITOS</div>
+<h2 data-pt="Os mais desejados." data-en="The most wanted.">Os mais desejados.</h2>
+<p data-pt="Produtos que merecem um lugar na sua rotina." data-en="Products that deserve a place in your routine.">Produtos que merecem um lugar na sua rotina.</p>
+</div>
+
+<div class="products">
+
+<article class="product">
+<div class="product-image"><img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=650&q=85" alt="Sérum Glow"><span class="product-tag">BESTSELLER</span></div>
+<div class="product-info"><h3 data-pt="Sérum Facial Glow" data-en="Glow Facial Serum">Sérum Facial Glow</h3><p data-pt="Hidratação e luminosidade" data-en="Hydration and radiance">Hidratação e luminosidade</p><div class="price-row"><span class="price">R$ 89,90</span><span class="old-price">R$ 119,90</span><span class="discount">-25%</span></div><button class="buy-btn" onclick="addToCart('Sérum Facial Glow',89.90)" data-pt="ADICIONAR À SACOLA" data-en="ADD TO BAG">ADICIONAR À SACOLA</button></div>
+</article>
+
+<article class="product">
+<div class="product-image"><img src="https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=650&q=85" alt="Óleo Luxury"><span class="product-tag">FAVORITO</span></div>
+<div class="product-info"><h3 data-pt="Óleo Corporal Luxury" data-en="Luxury Body Oil">Óleo Corporal Luxury</h3><p data-pt="Toque macio e perfumado" data-en="Soft and scented touch">Toque macio e perfumado</p><div class="price-row"><span class="price">R$ 119,90</span><span class="old-price">R$ 149,90</span><span class="discount">-20%</span></div><button class="buy-btn" onclick="addToCart('Óleo Corporal Luxury',119.90)" data-pt="ADICIONAR À SACOLA" data-en="ADD TO BAG">ADICIONAR À SACOLA</button></div>
+</article>
+
+<article class="product">
+<div class="product-image"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=650&q=85" alt="Kit Beauty"><span class="product-tag">KIT ESPECIAL</span></div>
+<div class="product-info"><h3 data-pt="Kit Beauty Essentials" data-en="Beauty Essentials Kit">Kit Beauty Essentials</h3><p data-pt="Sua rotina em um só kit" data-en="Your routine in one kit">Sua rotina em um só kit</p><div class="price-row"><span class="price">R$ 149,90</span><span class="old-price">R$ 189,90</span><span class="discount">-21%</span></div><button class="buy-btn" onclick="addToCart('Kit Beauty Essentials',149.90)" data-pt="ADICIONAR À SACOLA" data-en="ADD TO BAG">ADICIONAR À SACOLA</button></div>
+</article>
+
+<article class="product">
+<div class="product-image"><img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=650&q=85" alt="Essência Bloom"><span class="product-tag">NEW</span></div>
+<div class="product-info"><h3 data-pt="Essência Bloom" data-en="Bloom Essence">Essência Bloom</h3><p data-pt="Uma fragrância inesquecível" data-en="An unforgettable fragrance">Uma fragrância inesquecível</p><div class="price-row"><span class="price">R$ 179,90</span></div><button class="buy-btn" onclick="addToCart('Essência Bloom',179.90)" data-pt="ADICIONAR À SACOLA" data-en="ADD TO BAG">ADICIONAR À SACOLA</button></div>
+</article>
+
+</div>
+</div>
+</section>
+
+<!-- OFERTA / CAMPANHA -->
+<section id="oferta">
+<div class="offer">
+<div class="offer-image"><img src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=1000&q=85" alt="Rotina de autocuidado"></div>
+<div class="offer-content">
+<div class="eyebrow" style="color:var(--accent)" data-pt="UM PRESENTE PARA VOCÊ" data-en="A GIFT FOR YOU">UM PRESENTE PARA VOCÊ</div>
+<h2 data-pt="Sua rotina merece um upgrade." data-en="Your routine deserves an upgrade.">Sua rotina merece um upgrade.</h2>
+<p data-pt="Descubra nossa seleção especial de produtos e aproveite condições exclusivas para renovar seu nécessaire." data-en="Discover our special product selection and enjoy exclusive offers to refresh your beauty routine.">Descubra nossa seleção especial de produtos e aproveite condições exclusivas para renovar seu nécessaire.</p>
+<a href="#mais-vendidos" class="btn" data-pt="QUERO CONHECER" data-en="DISCOVER NOW">QUERO CONHECER</a>
+</div>
+</div>
+</section>
+
+<!-- KIT -->
+<section class="section">
+<div class="container">
+<div class="kit">
+<div class="kit-image"><img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1000&q=85" alt="Kit de skincare"></div>
+<div class="kit-content">
+<div class="eyebrow" style="color:#d6a998" data-pt="A ESCOLHA INTELIGENTE" data-en="THE SMART CHOICE">A ESCOLHA INTELIGENTE</div>
+<h2 data-pt="Mais cuidado. Mais vantagens." data-en="More care. More value.">Mais cuidado. Mais vantagens.</h2>
+<p data-pt="Monte sua rotina com nossos kits especiais. Uma seleção de favoritos com preço especial para você." data-en="Build your routine with our special sets. A selection of favorites at a special price.">Monte sua rotina com nossos kits especiais. Uma seleção de favoritos com preço especial para você.</p>
+<div class="kit-price"><strong>R$ 149,90</strong><del>R$ 189,90</del></div>
+<button class="btn btn-white" onclick="addToCart('Kit Beauty Essentials',149.90)" data-pt="GARANTIR MEU KIT" data-en="GET MY KIT">GARANTIR MEU KIT</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- AVALIAÇÕES -->
+<section class="section reviews">
+<div class="container">
+<div class="heading">
+<div class="eyebrow" data-pt="QUEM EXPERIMENTA, CONTA" data-en="CUSTOMER LOVE">QUEM EXPERIMENTA, CONTA</div>
+<h2 data-pt="Experiências que inspiram." data-en="Experiences that inspire.">Experiências que inspiram.</h2>
+<p data-pt="Veja o que nossas clientes têm a dizer." data-en="See what our customers have to say.">Veja o que nossas clientes têm a dizer.</p>
+</div>
+<div class="review-grid">
+<div class="review"><div class="stars">★★★★★</div><p data-pt="“A experiência de compra foi ótima. Os produtos chegaram muito bem embalados e adorei a seleção!”" data-en="“The shopping experience was great. Products arrived beautifully packaged and I loved the selection!”">“A experiência de compra foi ótima. Os produtos chegaram muito bem embalados e adorei a seleção!”</p><strong>Mariana S.</strong><div class="verified">✓ <span data-pt="Cliente verificada" data-en="Verified customer">Cliente verificada</span></div></div>
+<div class="review"><div class="stars">★★★★★</div><p data-pt="“Encontrei exatamente o que procurava. Já estou de olho nos próximos produtos!”" data-en="“I found exactly what I was looking for. Already looking at my next purchases!”">“Encontrei exatamente o que procurava. Já estou de olho nos próximos produtos!”</p><strong>Camila R.</strong><div class="verified">✓ <span data-pt="Cliente verificada" data-en="Verified customer">Cliente verificada</span></div></div>
+<div class="review"><div class="stars">★★★★★</div><p data-pt="“Tudo muito bonito e a compra foi simples. Com certeza vou comprar novamente.”" data-en="“Everything is beautiful and checkout was easy. I'll definitely shop again.”">“Tudo muito bonito e a compra foi simples. Com certeza vou comprar novamente.”</p><strong>Juliana M.</strong><div class="verified">✓ <span data-pt="Cliente verificada" data-en="Verified customer">Cliente verificada</span></div></div>
+</div>
+</div>
+</section>
+
+<!-- MARCA -->
+<section class="section" id="sobre">
+<div class="container story">
+<div class="story-image"><img src="https://images.unsplash.com/photo-1600612253971-422e7f7faeb6?auto=format&fit=crop&w=1000&q=85" alt="Universo BEAUTÉ"></div>
+<div class="story-content">
+<div class="eyebrow" style="color:var(--accent)">THE BEAUTÉ EXPERIENCE</div>
+<h2 data-pt="Não é sobre mudar quem você é. É sobre cuidar de quem você é." data-en="It's not about changing who you are. It's about caring for who you are.">Não é sobre mudar quem você é. É sobre cuidar de quem você é.</h2>
+<p data-pt="A BEAUTÉ nasceu para tornar o autocuidado mais especial. Cada escolha é pensada para unir beleza, qualidade e uma experiência que faça sentido para sua rotina." data-en="BEAUTÉ was created to make self-care more special. Every choice is made to bring together beauty, quality and an experience that fits your routine.">A BEAUTÉ nasceu para tornar o autocuidado mais especial. Cada escolha é pensada para unir beleza, qualidade e uma experiência que faça sentido para sua rotina.</p>
+<a href="#mais-vendidos" class="btn" data-pt="ENCONTRE SEU FAVORITO" data-en="FIND YOUR FAVORITE">ENCONTRE SEU FAVORITO</a>
+</div>
+</div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+<div class="container">
+<div class="heading">
+<div class="eyebrow">FAQ</div>
+<h2 data-pt="Dúvidas frequentes." data-en="Frequently asked questions.">Dúvidas frequentes.</h2>
+<p data-pt="Tudo o que você precisa saber antes de comprar." data-en="Everything you need to know before shopping.">Tudo o que você precisa saber antes de comprar.</p>
+</div>
+<div class="faq">
+<div class="faq-item"><button class="faq-question" onclick="faq(this)"><span data-pt="Como funciona a entrega?" data-en="How does shipping work?">Como funciona a entrega?</span><i data-lucide="plus" size="17"></i></button><div class="faq-answer" data-pt="O prazo e o valor do frete são calculados no checkout conforme seu endereço." data-en="Shipping costs and delivery estimates are calculated at checkout based on your address.">O prazo e o valor do frete são calculados no checkout conforme seu endereço.</div></div>
+<div class="faq-item"><button class="faq-question" onclick="faq(this)"><span data-pt="Quais são as formas de pagamento?" data-en="What payment methods are available?">Quais são as formas de pagamento?</span><i data-lucide="plus" size="17"></i></button><div class="faq-answer" data-pt="As opções disponíveis aparecem na finalização da compra." data-en="Available payment methods are displayed at checkout.">As opções disponíveis aparecem na finalização da compra.</div></div>
+<div class="faq-item"><button class="faq-question" onclick="faq(this)"><span data-pt="Posso trocar ou devolver um produto?" data-en="Can I exchange or return a product?">Posso trocar ou devolver um produto?</span><i data-lucide="plus" size="17"></i></button><div class="faq-answer" data-pt="Consulte nossa política de trocas e devoluções para conhecer as condições e os prazos." data-en="Please check our returns policy for conditions and deadlines.">Consulte nossa política de trocas e devoluções para conhecer as condições e os prazos.</div></div>
+<div class="faq-item"><button class="faq-question" onclick="faq(this)"><span data-pt="Como acompanho meu pedido?" data-en="How can I track my order?">Como acompanho meu pedido?</span><i data-lucide="plus" size="17"></i></button><div class="faq-answer" data-pt="Após a confirmação do envio, você receberá as informações de rastreamento pelos canais cadastrados." data-en="Once your order ships, tracking information will be sent through your registered contact details.">Após a confirmação do envio, você receberá as informações de rastreamento pelos canais cadastrados.</div></div>
+</div>
+</div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+<div class="eyebrow" style="color:var(--accent)">BEAUTÉ NEWS</div>
+<h2 data-pt="Um pouco mais de beleza no seu dia." data-en="A little more beauty in your day.">Um pouco mais de beleza no seu dia.</h2>
+<p data-pt="Receba novidades, lançamentos e ofertas especiais." data-en="Get new arrivals, launches and special offers.">Receba novidades, lançamentos e ofertas especiais.</p>
+<form onsubmit="newsletter(event)">
+<input type="email" required placeholder="Seu melhor e-mail" id="email">
+<button type="submit" data-pt="QUERO RECEBER" data-en="SUBSCRIBE">QUERO RECEBER</button>
+</form>
+</section>
+
+</main>
+
+<footer class="footer">
+<div class="container">
+<div class="footer-grid">
+<div><h3>BEAUTÉ.</h3><p data-pt="Sua beleza, seu ritual, seu momento. Descubra uma experiência de autocuidado feita para você." data-en="Your beauty, your ritual, your moment. Discover a self-care experience made for you.">Sua beleza, seu ritual, seu momento. Descubra uma experiência de autocuidado feita para você.</p></div>
+<div><h4 data-pt="LOJA" data-en="SHOP">LOJA</h4><a href="#categorias" data-pt="Categorias" data-en="Categories">Categorias</a><a href="#mais-vendidos" data-pt="Produtos" data-en="Products">Produtos</a><a href="#oferta" data-pt="Ofertas" data-en="Offers">Ofertas</a></div>
+<div><h4 data-pt="ATENDIMENTO" data-en="SUPPORT">ATENDIMENTO</h4><a href="#">Contato</a><a href="#">Envios</a><a href="#">Trocas e devoluções</a></div>
+<div><h4>SOCIAL</h4><a href="#">Instagram</a><a href="#">Pinterest</a><a href="#">TikTok</a></div>
+</div>
+<div class="footer-bottom">© 2026 BEAUTÉ. <span data-pt="Todos os direitos reservados." data-en="All rights reserved.">Todos os direitos reservados.</span></div>
+</div>
+</footer>
+
+<!-- SACOLA -->
+<div class="cart-panel" id="cart-panel" onclick="if(event.target===this)toggleCart()">
+<div class="cart">
+<div class="cart-head"><strong data-pt="Sua sacola" data-en="Your bag">Sua sacola</strong><button onclick="toggleCart()" style="border:0;background:none"><i data-lucide="x"></i></button></div>
+<div class="cart-items" id="cart-items"></div>
+<div class="cart-total"><span>Subtotal</span><span id="cart-total">R$ 0,00</span></div>
+<button class="btn" style="width:100%" onclick="checkout()" data-pt="FINALIZAR COMPRA" data-en="CHECKOUT">FINALIZAR COMPRA</button>
+</div>
+</div>
+
+<div class="mobile-cta">
+<a href="#mais-vendidos"><span data-pt="ESCOLHA SEU FAVORITO" data-en="SHOP YOUR FAVORITES">ESCOLHA SEU FAVORITO</span> &nbsp; →</a>
+</div>
+
+<script>
+let language='pt';
+let cart=[];
+
+function money(v){
+return v.toLocaleString(language==='pt'?'pt-BR':'en-US',{style:'currency',currency:language==='pt'?'BRL':'USD'});
+}
+
+function toggleLanguage(){
+language=language==='pt'?'en':'pt';
+document.documentElement.lang=language==='pt'?'pt-BR':'en';
+document.querySelectorAll('[data-pt]').forEach(el=>{
+el.innerHTML=el.getAttribute('data-'+language);
+});
+document.getElementById('email').placeholder=language==='pt'?'Seu melhor e-mail':'Your email address';
+renderCart();
+}
+
+function addToCart(name,price){
+let p=cart.find(x=>x.name===name);
+if(p)p.qty++;
+else cart.push({name,price,qty:1});
+renderCart();
+document.getElementById('cart-panel').classList.add('open');
+}
+
+function renderCart(){
+document.getElementById('cart-count').textContent=cart.reduce((s,p)=>s+p.qty,0);
+document.getElementById('cart-items').innerHTML=cart.length?cart.map((p,i)=>`
+<div class="cart-row">
+<div><strong>${p.name}</strong><p>${p.qty} × ${money(p.price)}</p></div>
+<button onclick="removeItem(${i})" style="border:0;background:none;color:#bd806f">×</button>
+</div>`).join(''):`<p style="font-size:12px;color:#82766f">${language==='pt'?'Sua sacola está vazia.':'Your bag is empty.'}</p>`;
+document.getElementById('cart-total').textContent=money(cart.reduce((s,p)=>s+p.price*p.qty,0));
+}
+
+function removeItem(i){cart.splice(i,1);renderCart()}
+function toggleCart(){document.getElementById('cart-panel').classList.toggle('open')}
+
+function checkout(){
+if(!cart.length)return;
+alert(language==='pt'?'Conecte este botão ao checkout nativo da Shopify.':'Connect this button to the native Shopify checkout.');
+}
+
+function faq(btn){
+btn.parentElement.classList.toggle('open');
+}
+
+function newsletter(e){
+e.preventDefault();
+alert(language==='pt'?'Obrigado! Integre este formulário à sua lista de e-mails.':'Thank you! Connect this form to your email marketing list.');
+e.target.reset();
+}
+
+lucide.createIcons();
+renderCart();
+</script>
+
+</body>
+</html>

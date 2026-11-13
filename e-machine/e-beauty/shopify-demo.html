@@ -1,0 +1,533 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#f8f5f1">
+<title>BEAUTÉ — Experiência de compra</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f5f1;--white:#fff;--text:#29231f;--muted:#82766f;--accent:#bd806f;--line:#e9e2dc;--soft:#eee5df}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.serif{font-family:'Playfair Display',serif}
+.container{width:min(1100px,92%);margin:auto}
+.topbar{background:#29231f;color:white;text-align:center;padding:10px;font-size:10px;letter-spacing:1px}
+header{height:72px;border-bottom:1px solid var(--line);background:#f8f5f1;display:flex;align-items:center}
+.header-inner{display:flex;justify-content:space-between;align-items:center}
+.logo{font-family:'Playfair Display',serif;font-size:27px;letter-spacing:3px;text-decoration:none;color:var(--text)}
+.header-actions{display:flex;gap:20px;align-items:center}
+.header-actions button{border:0;background:none;font-size:12px}
+.page{display:none}
+.page.active{display:block}
+.product-layout{display:grid;grid-template-columns:1.1fr .9fr;gap:65px;padding:55px 0 85px}
+.gallery-main{height:570px;background:var(--soft);overflow:hidden}
+.gallery-main img{width:100%;height:100%;object-fit:cover}
+.thumbnails{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+.thumbnails button{height:95px;border:2px solid transparent;padding:0;overflow:hidden;background:var(--soft)}
+.thumbnails button.active{border-color:var(--accent)}
+.thumbnails img{width:100%;height:100%;object-fit:cover}
+.product-info{padding-top:15px}
+.eyebrow{font-size:10px;letter-spacing:2px;color:var(--accent);font-weight:700}
+.product-info h1{font:500 43px/1.1 'Playfair Display',serif;margin:15px 0}
+.rating{font-size:11px;color:var(--muted);margin:15px 0}
+.stars{color:var(--accent);letter-spacing:2px}
+.description{font-size:13px;line-height:1.9;color:var(--muted);margin:22px 0}
+.price-line{display:flex;gap:12px;align-items:center;margin:20px 0}
+.price{font-size:26px;font-weight:700}
+.old-price{font-size:14px;text-decoration:line-through;color:#a99e96}
+.discount{font-size:10px;color:#47795d;font-weight:700}
+.product-info label{display:block;font-size:11px;font-weight:700;margin:22px 0 10px}
+.variants{display:flex;gap:10px;flex-wrap:wrap}
+.variant{padding:12px 18px;border:1px solid var(--line);background:white;font-size:11px}
+.variant.active{border-color:var(--accent);background:#f4eae5}
+.quantity{display:flex;border:1px solid var(--line);width:max-content;background:white}
+.quantity button{width:40px;height:42px;border:0;background:white}
+.quantity span{width:40px;display:grid;place-items:center;font-size:12px}
+.primary{width:100%;border:0;background:var(--text);color:white;padding:18px;font-size:11px;font-weight:700;letter-spacing:1px;transition:.2s}
+.primary:hover{background:var(--accent)}
+.secondary{width:100%;border:1px solid var(--text);background:transparent;padding:17px;font-size:11px;margin-top:10px}
+.product-benefits{display:grid;gap:15px;margin-top:25px;border-top:1px solid var(--line);padding-top:22px}
+.benefit{font-size:11px;color:var(--muted);display:flex;gap:12px}
+.benefit b{color:var(--text)}
+.checkout-layout{display:grid;grid-template-columns:1fr 350px;gap:40px;padding:45px 0 80px}
+.checkout-heading h1{font:500 35px 'Playfair Display',serif;margin:0 0 10px}
+.checkout-heading p{font-size:11px;color:var(--muted)}
+.steps{display:flex;gap:8px;align-items:center;margin:25px 0 35px;font-size:10px}
+.step{padding:9px 13px;background:#eee8e2;color:var(--muted)}
+.step.active{background:var(--text);color:white}
+.step.done{background:#e4ede5;color:#42664a}
+.form-section{background:white;padding:25px;margin-bottom:15px}
+.form-section h2{font:500 22px 'Playfair Display',serif;margin:0 0 20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.field{display:flex;flex-direction:column;gap:7px}
+.field.full{grid-column:1/-1}
+.field label{font-size:10px;font-weight:700}
+.field input,.field select{width:100%;padding:14px;border:1px solid var(--line);outline:none;background:white;font-size:12px;border-radius:0}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.delivery-option,.payment-option{display:flex;align-items:center;gap:12px;padding:15px;border:1px solid var(--line);margin-bottom:10px;cursor:pointer;font-size:11px}
+.delivery-option.selected,.payment-option.selected{border-color:var(--accent);background:#faf5f1}
+.delivery-option input,.payment-option input{accent-color:var(--accent)}
+.delivery-option span:last-child{margin-left:auto;font-weight:700}
+.summary{background:white;padding:24px;height:max-content;position:sticky;top:20px}
+.summary h2{font:500 23px 'Playfair Display',serif;margin:0 0 20px}
+.summary-product{display:flex;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.summary-product img{width:65px;height:75px;object-fit:cover}
+.summary-product strong{font-size:11px;display:block;margin-top:8px}
+.summary-product small{font-size:10px;color:var(--muted)}
+.summary-row{display:flex;justify-content:space-between;font-size:11px;margin:15px 0;color:var(--muted)}
+.summary-row.total{border-top:1px solid var(--line);padding-top:18px;color:var(--text);font-size:15px;font-weight:700}
+.coupon{display:flex;margin:18px 0;gap:6px}
+.coupon input{width:100%;min-width:0;border:1px solid var(--line);padding:12px;font-size:10px}
+.coupon button{background:var(--text);color:white;border:0;padding:0 14px;font-size:10px}
+.coupon-msg{font-size:10px;color:#47795d;margin-top:-10px}
+.back{border:0;background:none;font-size:11px;color:var(--muted);padding:15px 0}
+.notice{text-align:center;color:var(--muted);font-size:10px;margin-top:15px}
+.payment-extra{display:none;padding:15px;background:var(--bg);margin-bottom:12px}
+.payment-extra.active{display:block}
+.success{max-width:600px;margin:70px auto;text-align:center;padding:40px 25px;background:white}
+.success-icon{width:65px;height:65px;border-radius:50%;background:#e5f0e5;color:#47795d;display:grid;place-items:center;margin:0 auto 20px;font-size:30px}
+.success h1{font:500 39px 'Playfair Display',serif}
+.success p{font-size:12px;line-height:1.9;color:var(--muted)}
+.order-number{background:var(--bg);padding:17px;margin:25px 0;font-size:12px}
+footer{padding:25px;text-align:center;border-top:1px solid var(--line);font-size:10px;color:var(--muted)}
+@media(max-width:750px){
+.container{width:91%}
+.product-layout{grid-template-columns:1fr;gap:20px;padding:20px 0 55px}
+.gallery-main{height:430px}
+.thumbnails button{height:75px}
+.product-info h1{font-size:37px}
+.product-info{padding-top:5px}
+.checkout-layout{grid-template-columns:1fr;gap:20px;padding:25px 0 60px}
+.checkout-heading h1{font-size:31px}
+.summary{position:static;grid-row:1}
+.form-grid{grid-template-columns:1fr}
+.field.full{grid-column:auto}
+.form-section{padding:20px}
+.steps{gap:4px;flex-wrap:wrap}
+.step{font-size:9px;padding:9px}
+.success{margin:30px auto}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">FRETE GRÁTIS EM PEDIDOS ACIMA DE R$ 199 • BEAUTÉ EXPERIENCE</div>
+
+<header>
+<div class="container header-inner">
+<a class="logo" href="#" onclick="showPage('product');return false">BEAUTÉ.</a>
+<div class="header-actions">
+<button onclick="showPage('product')">LOJA</button>
+<button onclick="showPage('cart')">SACOLA (<span id="cart-count">0</span>)</button>
+</div>
+</div>
+</header>
+
+<!-- PRODUTO -->
+<section class="page active" id="product">
+<div class="container">
+<div class="product-layout">
+
+<div>
+<div class="gallery-main">
+<img id="main-image" src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1000&q=85">
+</div>
+<div class="thumbnails">
+<button class="active" onclick="changeImage(this,'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1000&q=85')"><img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=300&q=75"></button>
+<button onclick="changeImage(this,'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1000&q=85')"><img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=300&q=75"></button>
+<button onclick="changeImage(this,'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=1000&q=85')"><img src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=300&q=75"></button>
+<button onclick="changeImage(this,'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1000&q=85')"><img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=300&q=75"></button>
+</div>
+</div>
+
+<div class="product-info">
+<div class="eyebrow">BEAUTÉ COLLECTION</div>
+<h1>Sérum Facial Glow</h1>
+<div class="rating"><span class="stars">★★★★★</span> 4,9/5 (128 avaliações)</div>
+<p class="description">Um cuidado especial para sua pele. Uma fórmula pensada para proporcionar hidratação, luminosidade e aquele toque de autocuidado que transforma sua rotina.</p>
+<div class="price-line">
+<span class="price">R$ 89,90</span>
+<span class="old-price">R$ 119,90</span>
+<span class="discount">-25%</span>
+</div>
+
+<label>ESCOLHA SUA VERSÃO</label>
+<div class="variants">
+<button class="variant active" onclick="selectVariant(this,'30 ml')">30 ml</button>
+<button class="variant" onclick="selectVariant(this,'50 ml')">50 ml (+ R$ 20,00)</button>
+</div>
+
+<label>QUANTIDADE</label>
+<div class="quantity">
+<button onclick="changeQty(-1)">−</button>
+<span id="qty">1</span>
+<button onclick="changeQty(1)">+</button>
+</div>
+
+<div style="margin-top:25px">
+<button class="primary" onclick="buyNow()">COMPRAR AGORA →</button>
+<button class="secondary" onclick="addCart()">ADICIONAR À SACOLA</button>
+</div>
+
+<div class="product-benefits">
+<div class="benefit">♡ <span><b>Autocuidado</b> em cada detalhe</span></div>
+<div class="benefit">♧ <span><b>Compra segura</b> e protegida</span></div>
+<div class="benefit">♧ <span><b>Entrega acompanhada</b> até você</span></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- SACOLA -->
+<section class="page" id="cart">
+<div class="container" style="padding:45px 0">
+<button class="back" onclick="showPage('product')">← CONTINUAR COMPRANDO</button>
+<h1 class="serif" style="font-size:38px;font-weight:500">Sua sacola.</h1>
+<p style="font-size:12px;color:var(--muted)">Seus favoritos estão quase chegando até você.</p>
+
+<div class="checkout-layout">
+<div id="cart-items"></div>
+<aside class="summary">
+<h2>Resumo do pedido</h2>
+<div class="summary-row"><span>Subtotal</span><strong id="cart-subtotal">R$ 0,00</strong></div>
+<div class="summary-row"><span>Entrega</span><span>Na próxima etapa</span></div>
+<div class="summary-row total"><span>Total</span><strong id="cart-total">R$ 0,00</strong></div>
+<button class="primary" onclick="goCheckout()">CONTINUAR PARA PAGAMENTO →</button>
+</aside>
+</div>
+</div>
+</section>
+
+<!-- CHECKOUT -->
+<section class="page" id="checkout">
+<div class="container checkout-layout">
+
+<div>
+<div class="checkout-heading">
+<div class="eyebrow">BEAUTÉ SECURE CHECKOUT</div>
+<h1>Finalizar pedido.</h1>
+<p>Preencha seus dados para concluir sua compra.</p>
+</div>
+
+<div class="steps">
+<span class="step active" id="step1">01. IDENTIFICAÇÃO</span>
+<span class="step" id="step2">02. ENTREGA</span>
+<span class="step" id="step3">03. PAGAMENTO</span>
+</div>
+
+<form id="checkout-form" onsubmit="finishOrder(event)">
+
+<div class="form-section">
+<h2>Seus dados</h2>
+<div class="form-grid">
+<div class="field full"><label>Nome completo</label><input id="name" required placeholder="Seu nome completo"></div>
+<div class="field"><label>E-mail</label><input type="email" id="email" required placeholder="seu@email.com"></div>
+<div class="field"><label>Telefone / WhatsApp</label><input id="phone" required placeholder="(11) 99999-9999"></div>
+</div>
+</div>
+
+<div class="form-section">
+<h2>Endereço de entrega</h2>
+<div class="form-grid">
+<div class="field"><label>CEP</label><input id="cep" required placeholder="00000-000" maxlength="9"></div>
+<div class="field"><label>Estado</label><select id="state" required><option value="">Selecione</option><option>SP</option><option>RJ</option><option>MG</option><option>PR</option><option>SC</option><option>RS</option><option>ES</option><option>BA</option><option>GO</option><option>DF</option><option>Outro</option></select></div>
+<div class="field full"><label>Endereço</label><input id="address" required placeholder="Rua, avenida..."></div>
+<div class="field"><label>Número</label><input id="number" required placeholder="Número"></div>
+<div class="field"><label>Complemento</label><input id="complement" placeholder="Apartamento, bloco..."></div>
+<div class="field"><label>Bairro</label><input id="district" required placeholder="Seu bairro"></div>
+<div class="field"><label>Cidade</label><input id="city" required placeholder="Sua cidade"></div>
+</div>
+</div>
+
+<div class="form-section">
+<h2>Forma de entrega</h2>
+<label class="delivery-option selected">
+<input type="radio" name="shipping" value="15" checked onchange="selectShipping(this)">
+<span><b>Entrega padrão</b><br>5 a 8 dias úteis</span><span>R$ 15,00</span>
+</label>
+<label class="delivery-option">
+<input type="radio" name="shipping" value="25" onchange="selectShipping(this)">
+<span><b>Entrega expressa</b><br>2 a 4 dias úteis</span><span>R$ 25,00</span>
+</label>
+<label class="delivery-option">
+<input type="radio" name="shipping" value="0" onchange="selectShipping(this)">
+<span><b>Frete grátis</b><br>Condição promocional</span><span>Grátis</span>
+</label>
+</div>
+
+<div class="form-section">
+<h2>Pagamento</h2>
+<label class="payment-option selected">
+<input type="radio" name="payment" value="PIX" checked onchange="selectPayment(this)">
+<span><b>PIX</b><br>Pagamento instantâneo</span>
+</label>
+<div class="payment-extra active" id="pix-extra">
+Pagamento por PIX simulado. Nenhuma cobrança real será realizada.
+</div>
+
+<label class="payment-option">
+<input type="radio" name="payment" value="Cartão de crédito" onchange="selectPayment(this)">
+<span><b>Cartão de crédito</b><br>Até 3x sem juros (simulação)</span>
+</label>
+<div class="payment-extra" id="card-extra">
+<div class="form-grid">
+<div class="field full"><label>Número do cartão (teste)</label><input placeholder="0000 0000 0000 0000" maxlength="19"></div>
+<div class="field full"><label>Nome impresso</label><input placeholder="Nome no cartão"></div>
+<div class="field"><label>Validade</label><input placeholder="MM/AA" maxlength="5"></div>
+<div class="field"><label>CVV</label><input placeholder="123" maxlength="4"></div>
+</div>
+<p style="font-size:10px;color:#a45f4f">Dados fictícios. Não informe dados reais de cartão neste protótipo.</p>
+</div>
+
+<label class="payment-option">
+<input type="radio" name="payment" value="Boleto" onchange="selectPayment(this)">
+<span><b>Boleto bancário</b><br>Vencimento em 3 dias (simulação)</span>
+</label>
+<div class="payment-extra" id="boleto-extra">
+O boleto será representado por uma confirmação fictícia neste protótipo.
+</div>
+</div>
+
+<button class="primary" type="submit">CONFIRMAR PEDIDO →</button>
+<button type="button" class="back" onclick="showPage('cart')">← VOLTAR À SACOLA</button>
+
+</form>
+</div>
+
+<aside class="summary">
+<h2>Seu pedido</h2>
+<div id="checkout-products"></div>
+<div class="coupon">
+<input id="coupon" placeholder="Cupom de desconto">
+<button type="button" onclick="applyCoupon()">APLICAR</button>
+</div>
+<div class="coupon-msg" id="coupon-msg"></div>
+<div class="summary-row"><span>Subtotal</span><strong id="checkout-subtotal">R$ 0,00</strong></div>
+<div class="summary-row"><span>Entrega</span><strong id="shipping-value">R$ 15,00</strong></div>
+<div class="summary-row"><span>Desconto</span><strong id="discount-value">R$ 0,00</strong></div>
+<div class="summary-row total"><span>Total</span><strong id="checkout-total">R$ 0,00</strong></div>
+<div class="notice">♧ Seus dados nesta demonstração não são enviados a nenhum servidor.</div>
+</aside>
+
+</div>
+</section>
+
+<!-- CONFIRMAÇÃO -->
+<section class="page" id="success">
+<div class="container">
+<div class="success">
+<div class="success-icon">✓</div>
+<div class="eyebrow">BEAUTÉ EXPERIENCE</div>
+<h1>Pedido confirmado!</h1>
+<p>Que bom ter você por aqui. Sua experiência BEAUTÉ está começando.</p>
+<div class="order-number">
+Pedido <strong id="order-number">#BT-000001</strong><br>
+<span id="order-total"></span>
+</div>
+<p id="order-description">Esta é uma confirmação demonstrativa. Nenhum pagamento ou pedido real foi criado.</p>
+<button class="primary" onclick="resetShop()">VOLTAR À LOJA</button>
+</div>
+</div>
+</section>
+
+<footer>BEAUTÉ. © 2026 — Todos os direitos reservados.</footer>
+
+<script>
+let qty=1;
+let variant='30 ml';
+let unitPrice=89.90;
+let cart=[];
+let shipping=15;
+let discount=0;
+let couponApplied=false;
+
+const format=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const productImage='https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=500&q=80';
+
+function showPage(id){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+window.scrollTo({top:0,behavior:'smooth'});
+if(id==='cart')renderCart();
+if(id==='checkout')renderCheckout();
+}
+
+function changeImage(btn,url){
+document.getElementById('main-image').src=url;
+document.querySelectorAll('.thumbnails button').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+}
+
+function changeQty(v){
+qty=Math.max(1,Math.min(20,qty+v));
+document.getElementById('qty').textContent=qty;
+}
+
+function selectVariant(btn,v){
+variant=v;
+unitPrice=v==='30 ml'?89.90:109.90;
+document.querySelectorAll('.variant').forEach(b=>b.classList.remove('active'));
+btn.classList.add('active');
+document.querySelector('.price').textContent=format(unitPrice);
+}
+
+function addCart(){
+let existing=cart.find(p=>p.variant===variant);
+if(existing)existing.qty+=qty;
+else cart.push({name:'Sérum Facial Glow',variant,price:unitPrice,qty,image:productImage});
+updateCount();
+showPage('cart');
+}
+
+function buyNow(){
+cart=[{name:'Sérum Facial Glow',variant,price:unitPrice,qty,image:productImage}];
+updateCount();
+showPage('checkout');
+}
+
+function updateCount(){
+document.getElementById('cart-count').textContent=cart.reduce((s,p)=>s+p.qty,0);
+}
+
+function subtotal(){
+return cart.reduce((s,p)=>s+p.price*p.qty,0);
+}
+
+function renderCart(){
+let el=document.getElementById('cart-items');
+
+if(!cart.length){
+el.innerHTML='<div style="background:white;padding:30px;font-size:12px">Sua sacola está vazia. <button onclick="showPage(\'product\')" style="text-decoration:underline;border:0;background:none">Explorar produtos</button></div>';
+}else{
+el.innerHTML=cart.map((p,i)=>`
+<div class="summary-product" style="padding:18px 0">
+<img src="${p.image}">
+<div style="flex:1">
+<strong>${p.name}</strong>
+<small>${p.variant}</small>
+<div style="display:flex;align-items:center;gap:10px;margin-top:12px">
+<button onclick="cartQty(${i},-1)" style="border:1px solid #e9e2dc;background:white;width:27px;height:27px">−</button>
+<span style="font-size:11px">${p.qty}</span>
+<button onclick="cartQty(${i},1)" style="border:1px solid #e9e2dc;background:white;width:27px;height:27px">+</button>
+<button onclick="removeProduct(${i})" style="border:0;background:none;text-decoration:underline;font-size:10px;color:#82766f">Remover</button>
+</div>
+</div>
+<strong style="font-size:12px">${format(p.price*p.qty)}</strong>
+</div>`).join('');
+}
+
+document.getElementById('cart-subtotal').textContent=format(subtotal());
+document.getElementById('cart-total').textContent=format(subtotal());
+}
+
+function cartQty(i,v){
+cart[i].qty=Math.max(1,cart[i].qty+v);
+updateCount();renderCart();
+}
+
+function removeProduct(i){
+cart.splice(i,1);
+updateCount();renderCart();
+}
+
+function goCheckout(){
+if(!cart.length){alert('Sua sacola está vazia.');return}
+showPage('checkout');
+}
+
+function renderCheckout(){
+document.getElementById('checkout-products').innerHTML=cart.map(p=>`
+<div class="summary-product">
+<img src="${p.image}">
+<div><strong>${p.name}</strong><small>${p.variant} • Qtd. ${p.qty}</small></div>
+<strong style="margin-left:auto;font-size:11px">${format(p.price*p.qty)}</strong>
+</div>`).join('');
+updateTotals();
+}
+
+function selectShipping(input){
+shipping=Number(input.value);
+document.querySelectorAll('.delivery-option').forEach(el=>el.classList.remove('selected'));
+input.closest('.delivery-option').classList.add('selected');
+updateTotals();
+}
+
+function selectPayment(input){
+document.querySelectorAll('.payment-option').forEach(el=>el.classList.remove('selected'));
+input.closest('.payment-option').classList.add('selected');
+document.querySelectorAll('.payment-extra').forEach(el=>el.classList.remove('active'));
+let id=input.value==='PIX'?'pix-extra':input.value==='Boleto'?'boleto-extra':'card-extra';
+document.getElementById(id).classList.add('active');
+}
+
+function applyCoupon(){
+let code=document.getElementById('coupon').value.trim().toUpperCase();
+let msg=document.getElementById('coupon-msg');
+
+if(code==='BEAUTÉ10'||code==='BEAUTE10'){
+discount=subtotal()*.10;
+couponApplied=true;
+msg.textContent='Cupom aplicado! Você ganhou 10% de desconto.';
+}else{
+discount=0;couponApplied=false;
+msg.style.color='#a45f4f';
+msg.textContent='Cupom inválido. Tente BEAUTÉ10.';
+}
+updateTotals();
+}
+
+function updateTotals(){
+if(couponApplied)discount=subtotal()*.10;
+document.getElementById('checkout-subtotal').textContent=format(subtotal());
+document.getElementById('shipping-value').textContent=shipping===0?'Grátis':format(shipping);
+document.getElementById('discount-value').textContent='-'+format(discount);
+document.getElementById('checkout-total').textContent=format(Math.max(0,subtotal()+shipping-discount));
+}
+
+function finishOrder(e){
+e.preventDefault();
+
+if(!cart.length){alert('Sua sacola está vazia.');return}
+
+let selected=document.querySelector('input[name="payment"]:checked');
+
+if(!selected)return;
+
+if(selected.value==='Cartão de crédito'){
+let inputs=document.querySelectorAll('#card-extra input');
+if([...inputs].some(i=>!i.value.trim())){
+alert('Preencha os campos demonstrativos do cartão.');
+return;
+}
+}
+
+let order='BT-'+Math.floor(100000+Math.random()*900000);
+document.getElementById('order-number').textContent='#'+order;
+document.getElementById('order-total').textContent='Total: '+format(subtotal()+shipping-discount);
+document.getElementById('order-description').textContent=
+'Pagamento selecionado: '+selected.value+'. Esta é uma simulação: nenhum pedido real foi criado e nenhum pagamento foi processado.';
+
+showPage('success');
+}
+
+function resetShop(){
+cart=[];qty=1;shipping=15;discount=0;couponApplied=false;
+document.getElementById('qty').textContent='1';
+document.getElementById('coupon').value='';
+document.getElementById('coupon-msg').textContent='';
+document.getElementById('checkout-form').reset();
+document.querySelectorAll('.delivery-option').forEach((el,i)=>el.classList.toggle('selected',i===0));
+document.querySelectorAll('.payment-option').forEach((el,i)=>el.classList.toggle('selected',i===0));
+document.querySelectorAll('.payment-extra').forEach((el,i)=>el.classList.toggle('active',i===0));
+updateCount();
+showPage('product');
+}
+</script>
+</body>
+</html>

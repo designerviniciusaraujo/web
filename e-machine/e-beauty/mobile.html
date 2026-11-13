@@ -1,0 +1,841 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#f8f5f1">
+<title>BEAUTÉ — Beauty App</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#f8f5f1;
+--surface:#fff;
+--text:#29231f;
+--muted:#948981;
+--accent:#bd806f;
+--soft:#eee5df;
+--line:#eee8e2;
+}
+*{box-sizing:border-box}
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:'DM Sans',sans-serif;
+-webkit-tap-highlight-color:transparent;
+}
+button{cursor:pointer}
+.serif{font-family:'Playfair Display',serif}
+.app{
+max-width:520px;
+min-height:100vh;
+margin:auto;
+background:var(--bg);
+position:relative;
+padding-bottom:88px;
+overflow:hidden;
+}
+.topbar{
+height:65px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
+position:sticky;
+top:0;
+z-index:20;
+background:rgba(248,245,241,.96);
+backdrop-filter:blur(12px);
+border-bottom:1px solid var(--line);
+}
+.logo{
+font-family:'Playfair Display',serif;
+font-size:25px;
+letter-spacing:3px;
+font-weight:600;
+}
+.icon{
+border:0;
+background:none;
+display:flex;
+align-items:center;
+justify-content:center;
+width:40px;
+height:40px;
+position:relative;
+}
+.dot{
+position:absolute;
+right:3px;
+top:3px;
+background:var(--accent);
+color:white;
+border-radius:50%;
+width:16px;
+height:16px;
+font-size:9px;
+display:grid;
+place-items:center;
+}
+.screen{display:none;animation:appear .25s ease}
+.screen.active{display:block}
+@keyframes appear{
+from{opacity:0;transform:translateY(5px)}
+to{opacity:1;transform:translateY(0)}
+}
+.greeting{padding:22px 20px 16px}
+.greeting small{
+color:var(--muted);
+font-size:11px;
+letter-spacing:1px;
+text-transform:uppercase;
+}
+.greeting h1{
+font-family:'Playfair Display',serif;
+font-weight:500;
+font-size:30px;
+line-height:1.15;
+margin:7px 0 0;
+}
+.search{
+margin:0 20px 20px;
+height:46px;
+background:white;
+border:1px solid var(--line);
+display:flex;
+align-items:center;
+padding:0 14px;
+gap:10px;
+border-radius:8px;
+}
+.search input{
+border:0;
+outline:0;
+background:transparent;
+width:100%;
+font:inherit;
+font-size:12px;
+}
+.hero{
+margin:0 15px;
+height:360px;
+border-radius:5px;
+overflow:hidden;
+position:relative;
+background:#c6aaa0;
+}
+.hero img{width:100%;height:100%;object-fit:cover}
+.hero:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(0deg,rgba(32,25,21,.68),transparent 80%);
+}
+.hero-content{
+position:absolute;
+z-index:2;
+bottom:25px;
+left:22px;
+right:22px;
+color:white;
+}
+.hero-content small{
+font-size:10px;
+letter-spacing:2px;
+}
+.hero-content h2{
+font-family:'Playfair Display',serif;
+font-size:39px;
+font-weight:500;
+line-height:1.05;
+margin:10px 0;
+}
+.hero-content p{
+font-size:11px;
+line-height:1.7;
+max-width:270px;
+}
+.light-btn{
+background:white;
+color:#29231f;
+border:0;
+padding:13px 22px;
+font-size:10px;
+letter-spacing:1px;
+margin-top:12px;
+}
+.section{
+padding:30px 20px 10px;
+}
+.section-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:17px;
+}
+.section-head h2{
+font-family:'Playfair Display',serif;
+font-size:25px;
+font-weight:500;
+margin:0;
+}
+.section-head button{
+border:0;
+background:none;
+color:var(--accent);
+font-size:10px;
+}
+.categories{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:12px;
+}
+.category{
+text-align:center;
+border:0;
+background:none;
+padding:0;
+min-width:0;
+}
+.category img{
+width:100%;
+aspect-ratio:1;
+object-fit:cover;
+border-radius:50%;
+background:var(--soft);
+}
+.category span{
+display:block;
+font-size:10px;
+margin-top:9px;
+white-space:nowrap;
+}
+.product-scroll{
+display:flex;
+gap:13px;
+overflow-x:auto;
+padding-bottom:12px;
+scrollbar-width:none;
+}
+.product-scroll::-webkit-scrollbar{display:none}
+.product{
+flex:0 0 160px;
+min-width:0;
+}
+.product-image{
+width:100%;
+aspect-ratio:.83;
+position:relative;
+background:var(--soft);
+overflow:hidden;
+border-radius:3px;
+}
+.product-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+.product-image .favorite{
+position:absolute;
+right:9px;
+top:9px;
+background:white;
+border:0;
+border-radius:50%;
+width:32px;
+height:32px;
+display:grid;
+place-items:center;
+}
+.product-info{padding:10px 0}
+.product-info h3{
+font-size:11px;
+font-weight:500;
+margin:0 0 6px;
+}
+.product-info p{
+font-size:10px;
+color:var(--muted);
+margin:0;
+}
+.price{
+font-size:12px;
+font-weight:700;
+margin-top:9px;
+}
+.add{
+width:100%;
+padding:11px;
+background:var(--text);
+color:white;
+border:0;
+font-size:9px;
+letter-spacing:1px;
+margin-top:10px;
+}
+.banner{
+margin:28px 15px;
+height:210px;
+position:relative;
+overflow:hidden;
+}
+.banner img{width:100%;height:100%;object-fit:cover}
+.banner:after{
+content:"";
+position:absolute;
+inset:0;
+background:linear-gradient(90deg,rgba(31,25,22,.65),transparent);
+}
+.banner-content{
+position:absolute;
+z-index:2;
+top:50%;
+left:20px;
+transform:translateY(-50%);
+color:white;
+max-width:220px;
+}
+.banner-content h2{
+font-family:'Playfair Display',serif;
+font-size:29px;
+line-height:1.1;
+font-weight:500;
+}
+.banner-content button{
+background:white;
+color:#29231f;
+border:0;
+padding:12px 17px;
+font-size:9px;
+margin-top:10px;
+}
+.feature{
+margin:20px;
+background:#eee5df;
+padding:28px;
+text-align:center;
+}
+.feature h2{
+font-family:'Playfair Display',serif;
+font-size:28px;
+font-weight:500;
+}
+.feature p{
+font-size:11px;
+color:var(--muted);
+line-height:1.8;
+}
+.bottom-nav{
+position:fixed;
+bottom:0;
+left:50%;
+transform:translateX(-50%);
+width:100%;
+max-width:520px;
+height:75px;
+padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+display:grid;
+grid-template-columns:repeat(5,1fr);
+background:rgba(255,255,255,.97);
+border-top:1px solid var(--line);
+z-index:40;
+backdrop-filter:blur(15px);
+}
+.nav-item{
+border:0;
+background:none;
+color:#9a918b;
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:5px;
+font-size:9px;
+}
+.nav-item.active{color:var(--accent)}
+.nav-item.active svg{stroke-width:2.4}
+.page-title{
+padding:25px 20px;
+font-family:'Playfair Display',serif;
+font-size:31px;
+font-weight:500;
+}
+.search-page{padding:0 20px}
+.search-page .search{margin:0 0 20px}
+.grid-products{
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:18px 12px;
+padding:0 15px 30px;
+}
+.grid-products .product{width:100%;flex:auto}
+.empty{
+text-align:center;
+padding:65px 25px;
+color:var(--muted);
+}
+.empty svg{margin:auto auto 15px}
+.primary{
+background:var(--text);
+color:white;
+border:0;
+width:100%;
+padding:16px;
+font-size:10px;
+letter-spacing:1px;
+}
+.cart-row{
+display:flex;
+gap:13px;
+padding:15px 20px;
+border-bottom:1px solid var(--line);
+}
+.cart-row img{
+width:75px;
+height:85px;
+object-fit:cover;
+}
+.cart-row h3{font-size:12px;margin:5px 0}
+.cart-row p{font-size:11px;color:var(--muted)}
+.cart-row button{
+border:0;background:none;color:var(--accent);font-size:11px;
+}
+.cart-summary{
+padding:20px;
+border-top:1px solid var(--line);
+background:white;
+}
+.summary-line{
+display:flex;
+justify-content:space-between;
+font-size:12px;
+margin-bottom:15px;
+}
+.profile-card{
+margin:0 20px 15px;
+padding:20px;
+background:white;
+display:flex;
+align-items:center;
+gap:15px;
+}
+.avatar{
+width:48px;height:48px;border-radius:50%;
+background:var(--soft);
+display:grid;place-items:center;
+}
+.profile-option{
+margin:0 20px;
+padding:18px 0;
+border-bottom:1px solid var(--line);
+display:flex;
+justify-content:space-between;
+font-size:12px;
+}
+input,button{font-family:inherit}
+.toast{
+position:fixed;
+bottom:90px;
+left:50%;
+transform:translate(-50%,15px);
+opacity:0;
+background:#29231f;
+color:white;
+padding:13px 20px;
+font-size:11px;
+z-index:80;
+transition:.25s;
+pointer-events:none;
+white-space:nowrap;
+}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(min-width:700px){
+body{background:#e9e4df}
+.app{box-shadow:0 0 50px #0000000c}
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<header class="topbar">
+<button class="icon" onclick="showScreen('home')" aria-label="Início">
+<i data-lucide="flower-2"></i>
+</button>
+
+<div class="logo">BEAUTÉ.</div>
+
+<button class="icon" onclick="showScreen('cart')" aria-label="Sacola">
+<i data-lucide="shopping-bag"></i>
+<span class="dot" id="cart-count">0</span>
+</button>
+</header>
+
+<!-- HOME -->
+<section class="screen active" id="home">
+
+<div class="greeting">
+<small data-pt="BEM-VINDA À BEAUTÉ" data-en="WELCOME TO BEAUTÉ">BEM-VINDA À BEAUTÉ</small>
+<h1 data-pt="Olá, que bom ter você aqui." data-en="Hello, we're happy you're here.">Olá, que bom ter você aqui.</h1>
+</div>
+
+<div class="search">
+<i data-lucide="search" size="18"></i>
+<input id="home-search" placeholder="O que você está procurando?" data-pt-placeholder="O que você está procurando?" data-en-placeholder="What are you looking for?" onkeydown="if(event.key==='Enter')searchProducts(this.value)">
+</div>
+
+<div class="hero">
+<img src="https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=1000&q=85" alt="Beauty collection">
+<div class="hero-content">
+<small data-pt="SEU MOMENTO DE BELEZA" data-en="YOUR BEAUTY MOMENT">SEU MOMENTO DE BELEZA</small>
+<h2 data-pt="Sua beleza.<br>Seu ritual." data-en="Your beauty.<br>Your ritual.">Sua beleza.<br>Seu ritual.</h2>
+<p data-pt="Descubra produtos especiais para cuidar de você todos os dias." data-en="Discover special products to care for yourself every day.">Descubra produtos especiais para cuidar de você todos os dias.</p>
+<button class="light-btn" onclick="showScreen('shop')" data-pt="EXPLORAR AGORA" data-en="EXPLORE NOW">EXPLORAR AGORA</button>
+</div>
+</div>
+
+<div class="section">
+<div class="section-head">
+<h2 data-pt="Categorias" data-en="Categories">Categorias</h2>
+<button onclick="showScreen('shop')" data-pt="Ver todas →" data-en="View all →">Ver todas →</button>
+</div>
+
+<div class="categories">
+<button class="category" onclick="filterCategory('Maquiagem')">
+<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=300&q=80">
+<span data-pt="Maquiagem" data-en="Makeup">Maquiagem</span>
+</button>
+<button class="category" onclick="filterCategory('Skincare')">
+<img src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=300&q=80">
+<span>Skincare</span>
+</button>
+<button class="category" onclick="filterCategory('Perfumes')">
+<img src="https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=300&q=80">
+<span data-pt="Perfumes" data-en="Fragrance">Perfumes</span>
+</button>
+<button class="category" onclick="filterCategory('Corpo')">
+<img src="https://images.unsplash.com/photo-1600612253971-422e7f7faeb6?auto=format&fit=crop&w=300&q=80">
+<span data-pt="Corpo" data-en="Body">Corpo</span>
+</button>
+</div>
+</div>
+
+<div class="section">
+<div class="section-head">
+<h2 data-pt="Mais vendidos" data-en="Best sellers">Mais vendidos</h2>
+<button onclick="showScreen('shop')" data-pt="Ver todos →" data-en="View all →">Ver todos →</button>
+</div>
+<div class="product-scroll" id="featured-products"></div>
+</div>
+
+<div class="banner">
+<img src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=1000&q=80" alt="Skincare">
+<div class="banner-content">
+<small data-pt="NOVO NA BEAUTÉ" data-en="NEW AT BEAUTÉ">NOVO NA BEAUTÉ</small>
+<h2 data-pt="Um carinho em cada detalhe." data-en="A little care in every detail.">Um carinho em cada detalhe.</h2>
+<button onclick="showScreen('shop')" data-pt="DESCOBRIR" data-en="DISCOVER">DESCOBRIR</button>
+</div>
+</div>
+
+<div class="section">
+<div class="section-head">
+<h2 data-pt="Novidades" data-en="New arrivals">Novidades</h2>
+<button onclick="showScreen('shop')" data-pt="Ver todos →" data-en="View all →">Ver todos →</button>
+</div>
+<div class="product-scroll" id="new-products"></div>
+</div>
+
+<div class="feature">
+<i data-lucide="heart" size="25"></i>
+<h2 data-pt="A beleza está em você." data-en="Beauty is within you.">A beleza está em você.</h2>
+<p data-pt="Selecionamos cada produto pensando em transformar sua rotina em um momento especial." data-en="Every product is selected to turn your routine into a special moment.">Selecionamos cada produto pensando em transformar sua rotina em um momento especial.</p>
+</div>
+
+</section>
+
+<!-- LOJA -->
+<section class="screen" id="shop">
+<h1 class="page-title" data-pt="Nossa coleção" data-en="Our collection">Nossa coleção</h1>
+
+<div class="search">
+<i data-lucide="search" size="18"></i>
+<input id="shop-search" placeholder="Buscar produtos..." data-pt-placeholder="Buscar produtos..." data-en-placeholder="Search products..." oninput="searchProducts(this.value)">
+</div>
+
+<div style="padding:0 20px 18px;display:flex;gap:9px;overflow-x:auto">
+<button class="filter" onclick="filterCategory('Todos')">Todos</button>
+<button class="filter" onclick="filterCategory('Maquiagem')">Makeup</button>
+<button class="filter" onclick="filterCategory('Skincare')">Skincare</button>
+<button class="filter" onclick="filterCategory('Perfumes')">Perfumes</button>
+<button class="filter" onclick="filterCategory('Corpo')">Corpo</button>
+</div>
+
+<div class="grid-products" id="all-products"></div>
+</section>
+
+<!-- BUSCA -->
+<section class="screen" id="search">
+<h1 class="page-title" data-pt="Buscar" data-en="Search">Buscar</h1>
+<div class="search-page">
+<div class="search">
+<i data-lucide="search" size="18"></i>
+<input id="search-input" placeholder="Encontre seu próximo favorito..." oninput="searchProducts(this.value)" data-pt-placeholder="Encontre seu próximo favorito..." data-en-placeholder="Find your next favorite...">
+</div>
+</div>
+<div class="grid-products" id="search-results"></div>
+</section>
+
+<!-- FAVORITOS -->
+<section class="screen" id="favorites">
+<h1 class="page-title" data-pt="Meus favoritos" data-en="My favorites">Meus favoritos</h1>
+<div class="grid-products" id="favorite-products"></div>
+<div class="empty" id="favorites-empty">
+<i data-lucide="heart" size="35"></i>
+<p data-pt="Seus produtos favoritos aparecerão aqui." data-en="Your favorite products will appear here.">Seus produtos favoritos aparecerão aqui.</p>
+</div>
+</section>
+
+<!-- SACOLA -->
+<section class="screen" id="cart">
+<h1 class="page-title" data-pt="Minha sacola" data-en="My bag">Minha sacola</h1>
+<div id="cart-content"></div>
+</section>
+
+<!-- PERFIL -->
+<section class="screen" id="account">
+<h1 class="page-title" data-pt="Minha conta" data-en="My account">Minha conta</h1>
+<div class="profile-card">
+<div class="avatar"><i data-lucide="user"></i></div>
+<div>
+<strong style="font-size:13px" data-pt="Bem-vinda!" data-en="Welcome!">Bem-vinda!</strong>
+<p style="font-size:10px;color:var(--muted)" data-pt="Entre ou crie sua conta BEAUTÉ." data-en="Sign in or create your BEAUTÉ account.">Entre ou crie sua conta BEAUTÉ.</p>
+</div>
+</div>
+<div class="profile-option" onclick="notify('Área de login Shopify')"><span data-pt="Entrar / Criar conta" data-en="Sign in / Create account">Entrar / Criar conta</span><i data-lucide="chevron-right" size="17"></i></div>
+<div class="profile-option" onclick="showScreen('cart')"><span data-pt="Meus pedidos" data-en="My orders">Meus pedidos</span><i data-lucide="chevron-right" size="17"></i></div>
+<div class="profile-option" onclick="showScreen('favorites')"><span data-pt="Meus favoritos" data-en="My favorites">Meus favoritos</span><i data-lucide="chevron-right" size="17"></i></div>
+<div class="profile-option" onclick="toggleLanguage()"><span data-pt="Idioma: Português / English" data-en="Language: English / Portuguese">Idioma: Português / English</span><i data-lucide="languages" size="17"></i></div>
+<div class="profile-option"><span>Instagram</span><i data-lucide="instagram" size="17"></i></div>
+</section>
+
+<!-- NAVEGAÇÃO -->
+<nav class="bottom-nav">
+<button class="nav-item active" data-screen="home" onclick="showScreen('home')">
+<i data-lucide="house" size="21"></i>
+<span data-pt="Início" data-en="Home">Início</span>
+</button>
+<button class="nav-item" data-screen="shop" onclick="showScreen('shop')">
+<i data-lucide="layout-grid" size="21"></i>
+<span data-pt="Loja" data-en="Shop">Loja</span>
+</button>
+<button class="nav-item" data-screen="search" onclick="showScreen('search')">
+<i data-lucide="search" size="21"></i>
+<span data-pt="Buscar" data-en="Search">Buscar</span>
+</button>
+<button class="nav-item" data-screen="favorites" onclick="showScreen('favorites')">
+<i data-lucide="heart" size="21"></i>
+<span data-pt="Favoritos" data-en="Saved">Favoritos</span>
+</button>
+<button class="nav-item" data-screen="account" onclick="showScreen('account')">
+<i data-lucide="user-round" size="21"></i>
+<span data-pt="Conta" data-en="Account">Conta</span>
+</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const products=[
+{id:1,name:'Sérum Facial Glow',en:'Glow Facial Serum',category:'Skincare',price:89.90,tag:'Mais vendido',image:'https://images.unsplash.com/photo-1601049541289-9b1b7bbbfe19?auto=format&fit=crop&w=600&q=80'},
+{id:2,name:'Óleo Corporal Luxury',en:'Luxury Body Oil',category:'Corpo',price:119.90,tag:'Favorito',image:'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80'},
+{id:3,name:'Kit Beauty Essentials',en:'Beauty Essentials Kit',category:'Maquiagem',price:149.90,tag:'',image:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80'},
+{id:4,name:'Essência Bloom',en:'Bloom Essence',category:'Perfumes',price:179.90,tag:'Novo',image:'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80'},
+{id:5,name:'Creme Hidratante Daily',en:'Daily Moisturizer',category:'Skincare',price:79.90,tag:'Novo',image:'https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=600&q=80'},
+{id:6,name:'Óleo Nutritivo',en:'Nourishing Oil',category:'Corpo',price:99.90,tag:'',image:'https://images.unsplash.com/photo-1600612253971-422e7f7faeb6?auto=format&fit=crop&w=600&q=80'},
+{id:7,name:'Paleta Nude Collection',en:'Nude Collection Palette',category:'Maquiagem',price:109.90,tag:'Novo',image:'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=600&q=80'},
+{id:8,name:'Perfume Rose',en:'Rose Perfume',category:'Perfumes',price:159.90,tag:'',image:'https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80'}
+];
+
+let language='pt';
+let cart=[];
+let favorites=[];
+let activeFilter='Todos';
+
+const money=n=>n.toLocaleString(language==='pt'?'pt-BR':'en-US',{
+style:'currency',currency:language==='pt'?'BRL':'USD'
+});
+
+function productCard(p){
+const name=language==='pt'?p.name:p.en;
+return `
+<article class="product">
+<div class="product-image">
+<img src="${p.image}" alt="${name}" loading="lazy">
+${p.tag?`<span style="position:absolute;top:9px;left:9px;background:white;padding:6px;font-size:8px">${p.tag}</span>`:''}
+<button class="favorite" onclick="toggleFavorite(${p.id})">
+<i data-lucide="heart" size="16" style="${favorites.includes(p.id)?'fill:#bd806f;stroke:#bd806f':''}"></i>
+</button>
+</div>
+<div class="product-info">
+<h3>${name}</h3>
+<p>${p.category}</p>
+<div class="price">${money(p.price)}</div>
+<button class="add" onclick="addToCart(${p.id})">${language==='pt'?'ADICIONAR À SACOLA':'ADD TO BAG'}</button>
+</div>
+</article>`;
+}
+
+function renderProducts(){
+document.getElementById('featured-products').innerHTML=products.slice(0,4).map(productCard).join('');
+document.getElementById('new-products').innerHTML=products.slice(4).map(productCard).join('');
+renderShop();
+renderFavorites();
+renderCart();
+lucide.createIcons();
+}
+
+function renderShop(){
+let filtered=products.filter(p=>
+(activeFilter==='Todos'||p.category===activeFilter)
+);
+document.getElementById('all-products').innerHTML=filtered.map(productCard).join('');
+}
+
+function showScreen(id){
+document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.screen===id));
+window.scrollTo({top:0,behavior:'smooth'});
+if(id==='cart')renderCart();
+if(id==='favorites')renderFavorites();
+lucide.createIcons();
+}
+
+function addToCart(id){
+const p=products.find(x=>x.id===id);
+const item=cart.find(x=>x.id===id);
+if(item)item.qty++;
+else cart.push({...p,qty:1});
+renderCart();
+document.getElementById('cart-count').textContent=cart.reduce((s,p)=>s+p.qty,0);
+notify(language==='pt'?'Adicionado à sacola!':'Added to bag!');
+}
+
+function removeFromCart(id){
+cart=cart.filter(p=>p.id!==id);
+renderCart();
+}
+
+function changeQty(id,delta){
+const p=cart.find(x=>x.id===id);
+if(!p)return;
+p.qty+=delta;
+if(p.qty<=0)removeFromCart(id);
+else renderCart();
+}
+
+function renderCart(){
+document.getElementById('cart-count').textContent=cart.reduce((s,p)=>s+p.qty,0);
+const area=document.getElementById('cart-content');
+if(!cart.length){
+area.innerHTML=`<div class="empty"><i data-lucide="shopping-bag" size="35"></i><p>${language==='pt'?'Sua sacola está esperando por você.':'Your bag is waiting for you.'}</p><button class="primary" onclick="showScreen('shop')">${language==='pt'?'CONTINUAR COMPRANDO':'CONTINUE SHOPPING'}</button></div>`;
+lucide.createIcons();return;
+}
+let total=cart.reduce((s,p)=>s+p.price*p.qty,0);
+area.innerHTML=cart.map(p=>`
+<div class="cart-row">
+<img src="${p.image}">
+<div style="flex:1">
+<h3>${language==='pt'?p.name:p.en}</h3>
+<p>${money(p.price)}</p>
+<div style="display:flex;align-items:center;gap:14px;margin-top:12px">
+<button onclick="changeQty(${p.id},-1)">−</button>
+<span style="font-size:12px">${p.qty}</span>
+<button onclick="changeQty(${p.id},1)">+</button>
+<button onclick="removeFromCart(${p.id})">${language==='pt'?'Remover':'Remove'}</button>
+</div>
+</div>
+</div>`).join('')+
+`<div class="cart-summary">
+<div class="summary-line"><span>${language==='pt'?'Subtotal':'Subtotal'}</span><strong>${money(total)}</strong></div>
+<div class="summary-line"><span>${language==='pt'?'Frete calculado no checkout':'Shipping calculated at checkout'}</span></div>
+<button class="primary" onclick="checkout()">${language==='pt'?'FINALIZAR COMPRA':'CHECKOUT'}</button>
+</div>`;
+lucide.createIcons();
+}
+
+function toggleFavorite(id){
+if(favorites.includes(id))favorites=favorites.filter(x=>x!==id);
+else favorites.push(id);
+renderProducts();
+notify(language==='pt'?'Favoritos atualizados':'Favorites updated');
+}
+
+function renderFavorites(){
+document.getElementById('favorite-products').innerHTML=favorites.map(id=>productCard(products.find(p=>p.id===id))).join('');
+document.getElementById('favorites-empty').style.display=favorites.length?'none':'block';
+lucide.createIcons();
+}
+
+function filterCategory(cat){
+activeFilter=cat;
+showScreen('shop');
+renderShop();
+}
+
+function searchProducts(value){
+const term=value.toLowerCase().trim();
+const result=products.filter(p=>
+p.name.toLowerCase().includes(term)||
+p.en.toLowerCase().includes(term)||
+p.category.toLowerCase().includes(term)
+);
+document.getElementById('search-results').innerHTML=result.map(productCard).join('');
+if(!term)document.getElementById('search-results').innerHTML='';
+document.getElementById('all-products').innerHTML=result.map(productCard).join('');
+lucide.createIcons();
+}
+
+function toggleLanguage(){
+language=language==='pt'?'en':'pt';
+document.documentElement.lang=language==='pt'?'pt-BR':'en';
+document.querySelectorAll('[data-pt]').forEach(el=>{
+el.innerHTML=el.getAttribute('data-'+language);
+});
+document.querySelectorAll('[data-pt-placeholder]').forEach(el=>{
+el.placeholder=el.getAttribute('data-'+language+'-placeholder');
+});
+renderProducts();
+notify(language==='pt'?'Português selecionado':'English selected');
+}
+
+function checkout(){
+if(!cart.length)return;
+notify(language==='pt'?'Conecte o checkout Shopify para finalizar.':'Connect Shopify checkout to complete your order.');
+}
+
+function notify(message){
+const t=document.getElementById('toast');
+t.textContent=message;
+t.classList.add('show');
+clearTimeout(window.toastTimer);
+window.toastTimer=setTimeout(()=>t.classList.remove('show'),2200);
+}
+
+document.querySelectorAll('.filter').forEach(btn=>{
+btn.style.cssText='border:1px solid #e9e2dc;background:white;padding:9px 15px;font-size:10px;white-space:nowrap;border-radius:30px';
+});
+
+renderProducts();
+lucide.createIcons();
+</script>
+
+</body>
+</html>
