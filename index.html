@@ -77,6 +77,210 @@
         class="bg-[#f5f5f3] text-[#171717] antialiased transition-colors duration-300 dark:bg-[#0d0d0d] dark:text-[#f5f5f3]"
     >
 
+<style id="mobile-harmony-refinement">
+    :root {
+        --accent: #ff3008;
+        --ease-out: cubic-bezier(.22, 1, .36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+    /* Consistent rhythm and calmer visual hierarchy */
+    main section[id] { scroll-margin-top: 76px; }
+    #projects, #about, #services { padding-top: clamp(3.5rem, 8vw, 7rem); padding-bottom: clamp(3.5rem, 8vw, 7rem); }
+    #projects .project-group { margin-top: clamp(2.5rem, 5vw, 4rem); }
+    #projects .project-group:first-child { margin-top: 0; }
+    #projects p, #about p, #services p, #process p { text-wrap: pretty; }
+    #about h2, #services h2, #process h2 { text-wrap: balance; }
+
+    /* Softer, consistent movement */
+    a, button, .project-card, article {
+        -webkit-tap-highlight-color: transparent;
+    }
+    a, button, .project-card {
+        transition-timing-function: var(--ease-out);
+    }
+    .project-card {
+        transform: translateZ(0);
+        will-change: transform;
+    }
+    .project-card:active { transform: scale(.985); }
+    .project-card:hover { transform: translateY(-3px); }
+
+    /* Clearer hero: one primary action, one quiet secondary action */
+    #top h1 { max-width: 10ch; }
+    #top .start-conversation { box-shadow: 0 10px 30px rgba(0,0,0,.16); }
+    #top .start-conversation:hover { transform: translateY(-2px); }
+    #top a[href="#projects"] { display: none; }
+
+    /* Project cards: make the action discoverable on touch screens */
+    #projects .project-card { border-radius: 18px; }
+    #projects .project-controls {
+        display: flex !important;
+        opacity: 0;
+        transition: opacity .25s ease;
+    }
+    #projects .project-card:hover .project-controls,
+    #projects .project-card:focus-within .project-controls { opacity: 1; }
+    #projects .project-controls button { min-height: 42px; padding-inline: 16px; }
+    #projects .swiper-slide { height: auto; }
+
+    /* Reduce repeated calls to action; keep the main contact path obvious */
+    #projects .project-group > div > div:last-child a.start-conversation,
+    #services article > a.start-conversation { display: none !important; }
+    #services > div:last-child a.start-conversation { display: none !important; }
+
+    /* Service cards feel like one coherent set */
+    #services article { border-radius: 22px; }
+    #services article h3 { text-wrap: balance; }
+    #services article p { max-width: 42ch; }
+
+    /* Touch-friendly carousel controls */
+    .swiper-button-prev, .swiper-button-next,
+    .intelligent-prev, .intelligent-next {
+        min-width: 42px;
+        min-height: 42px;
+    }
+    .swiper-pagination-bullet,
+    .intelligent-pagination .swiper-pagination-bullet { cursor: pointer; }
+
+    /* A small entrance rhythm, without moving content around */
+    @media (prefers-reduced-motion: no-preference) {
+        #top h1 { animation: rise-in .75s var(--ease-out) both; }
+        #top p, #top .start-conversation, #top a[href*="curriculo"] {
+            animation: rise-in .75s var(--ease-out) both;
+            animation-delay: .08s;
+        }
+        @keyframes rise-in {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    }
+
+    @media (max-width: 767px) {
+        header nav { padding-top: 12px !important; padding-bottom: 12px !important; }
+        #top > section, main > section:first-of-type {
+            min-height: min(760px, 88svh);
+            display: flex;
+            align-items: center;
+            background-position: 58% center !important;
+            padding-top: 6.5rem !important;
+            padding-bottom: 3.5rem !important;
+        }
+        #top h1 {
+            font-size: clamp(3.45rem, 15vw, 5.2rem) !important;
+            line-height: .9 !important;
+            letter-spacing: -.075em !important;
+        }
+        #top p { max-width: 29ch; font-size: 14px !important; }
+        #top .mt-8.flex { gap: 10px; }
+        #top .start-conversation {
+            min-height: 48px;
+            padding-left: 18px;
+            font-size: 11px;
+        }
+        #top a[href*="curriculo"] {
+            min-height: 46px;
+            padding-inline: 15px;
+            font-size: 10px;
+        }
+
+        #projects .project-card { height: 230px !important; }
+        #projects .project-controls {
+            inset: auto 0 0 !important;
+            display: flex !important;
+            opacity: 1;
+            padding: 7px 12px;
+            background: linear-gradient(transparent, rgba(0,0,0,.68)) !important;
+            border: 0 !important;
+            backdrop-filter: none !important;
+        }
+        #projects .project-controls > div {
+            position: static !important;
+            height: 40px !important;
+            padding: 0 !important;
+        }
+        #projects .project-controls button {
+            justify-content: flex-end !important;
+            min-height: 40px;
+            width: auto !important;
+            padding-inline: 8px !important;
+            font-size: 10px !important;
+        }
+        #projects .swiper { overflow: visible; }
+        #projects .swiper-pagination { max-width: 70%; overflow: hidden; }
+        #projects .swiper-button-prev, #projects .swiper-button-next,
+        #projects .intelligent-prev, #projects .intelligent-next { display: none !important; }
+
+        #about .grid, #services .grid, #process .grid { gap: 2.5rem; }
+        #about h2, #services h2, #process h2 {
+            font-size: clamp(2.8rem, 12vw, 4.2rem) !important;
+            line-height: .94 !important;
+        }
+        #about .rounded-\[28px\] { padding: 24px !important; }
+        #about .rounded-\[28px\] .mt-12 { margin-top: 2rem !important; }
+        #services article h3 { font-size: 1.15rem; }
+        #services article { padding: 1.4rem !important; }
+        #services .grid { row-gap: 2rem; }
+        #services > div:last-child { gap: 12px; }
+        #process .py-7 { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after {
+            animation-duration: .01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: .01ms !important;
+            scroll-behavior: auto !important;
+        }
+    }
+</style>
+<style id="neural-ux-refinement">
+  :root { --neural-accent: #ff3008; --neural-ease: cubic-bezier(.2,.8,.2,1); }
+  html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+  body { line-height: 1.55; }
+  ::selection { background: #ff3008; color: #fff; }
+  a, button { -webkit-tap-highlight-color: transparent; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--neural-accent); outline-offset: 4px; }
+  /* Cognitive hierarchy: fewer competing signals, one obvious next step */
+  main > section:first-of-type { min-height: min(760px, 88svh); display: flex; align-items: center; }
+  main > section:first-of-type h1 { max-width: 9ch; font-size: clamp(3.25rem, 10.5vw, 7rem); line-height: .88; letter-spacing: -.075em; text-wrap: balance; }
+  main > section:first-of-type p { max-width: 34rem; font-size: clamp(.95rem, 1.4vw, 1.1rem); line-height: 1.7; color: rgba(255,255,255,.86); }
+  main > section:first-of-type .start-conversation { min-height: 48px; padding-left: 1.35rem; font-size: .78rem; box-shadow: 0 12px 34px rgba(0,0,0,.22); transition: transform .25s var(--neural-ease), box-shadow .25s var(--neural-ease); }
+  main > section:first-of-type a[href="#projects"] { display: none !important; }
+  main > section:first-of-type a[href*="curriculo"] { min-height: 44px; border-color: rgba(255,255,255,.28); font-size: .72rem; }
+  #projects h2, #about h2, #services h2, #process h2, #contact h2 { text-wrap: balance; }
+  #projects .project-card, #services article, #about .rounded-\[28px\] { transition: transform .35s var(--neural-ease), box-shadow .35s var(--neural-ease); }
+  #projects .project-card:hover, #services article:hover { transform: translateY(-4px); }
+  #projects .project-card:active, #services article:active { transform: scale(.99); }
+  #projects img, #services img { backface-visibility: hidden; }
+  #about p, #services p, #process p { max-width: 62ch; }
+  #services article { border-radius: 1.25rem; }
+  #contact h2 { max-width: 10ch; }
+  #contact .start-conversation { min-height: 52px; transition: transform .25s var(--neural-ease), box-shadow .25s var(--neural-ease); box-shadow: 0 12px 32px rgba(0,0,0,.16); }
+  #contact .start-conversation:hover, main > section:first-of-type .start-conversation:hover { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(0,0,0,.24); }
+  @media (max-width: 640px) {
+    main > section:first-of-type { min-height: 82svh; padding-top: 6rem; padding-bottom: 4rem; background-position: 58% center !important; }
+    main > section:first-of-type > div { width: 100%; }
+    main > section:first-of-type h1 { font-size: clamp(3.15rem, 15vw, 5.2rem); max-width: 8ch; }
+    main > section:first-of-type p { margin-top: 1.35rem; max-width: 29ch; font-size: .95rem; }
+    main > section:first-of-type .mt-8.flex { gap: .65rem; margin-top: 1.5rem; }
+    main > section:first-of-type .start-conversation { width: 100%; justify-content: space-between; }
+    main > section:first-of-type a[href*="curriculo"] { padding-inline: 1rem; }
+    #projects, #about, #services { padding-top: 4rem; padding-bottom: 4rem; }
+    #contact h2 { font-size: clamp(3rem, 13vw, 4.5rem); }
+    #contact .start-conversation { width: 100%; justify-content: space-between; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+
+
+
         <header class="absolute top-0 left-0 z-50 w-full bg-transparent">
             <nav class="mx-auto flex max-w-[1480px] items-center justify-between px-5 py-4 sm:px-8 lg:px-10">
                 <a href="#top" class="flex items-center gap-3">
@@ -179,86 +383,146 @@
                         </h1>
 
                         <p class="mt-8 max-w-[600px] text-[14px] leading-[1.7] text-white/75 sm:text-[15px]">
-                            Soluções reais, para solucionar problemas reais.
+                            Estratégia, design e tecnologia para transformar ideias em experiências claras, úteis e que geram resultados.
                         </p>
 
-                        <div class="mt-8 flex flex-wrap gap-3">
-                            <a
-                                href=" "
-                                class="start-conversation inline-flex items-center gap-3 rounded-full bg-white py-2.5 pl-5 pr-2.5 text-[10px] font-semibold text-[#171717] shadow-dark transition hover:-translate-y-0.5"
-                            >
-                                Falar sobre um projeto
-
-                                <span class="grid h-8 w-8 place-items-center rounded-full bg-[#171717] text-white">
-                                    <i data-lucide="arrow-down" class="h-3.5 w-3.5"></i>
-                                </span>
-                            </a>
-
-                            <a
-                                href="./curriculopreview.html"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-5 py-3 text-[10px] font-semibold text-white backdrop-blur transition hover:bg-white hover:text-black"
-                            >
-                                <i data-lucide="file-down" class="h-3.5 w-3.5"></i>
-                                Baixar currículo
-                            </a>
-
-                            <a
-                                href="#projects"
-                                class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/20 px-5 py-3 text-[10px] font-semibold text-white backdrop-blur transition hover:bg-white hover:text-black"
-                            >
-                                Ver projetos
-                            </a>
-                        </div>
+                       
                     </div>
                 </div>
+            </section>
+   <!-- SERVICES -->
+
+            <section id="services" class="mx-auto max-w-[1480px] px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
+                <div class="mb-12 max-w-[900px]">
+                    <span class="text-xs font-semibold uppercase tracking-[.2em] text-[#FF2B16]"> Meus Serviços </span>
+
+                    <h2 class="text-[48px] font-medium leading-[.9] tracking-[-.065em] sm:text-[70px] lg:text-[88px]">
+                        Você traz um desafio.<br />
+
+                        <span class="text-black/25 dark:text-white/25"> Eu construo a solução. </span>
+                    </h2>
+                </div>
+
+<div class="lg:p-6">
+    <!-- SERVICES -->
+    <section class="">
+        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+
+            <!-- 01 -->
+            <article class="group rounded-2xl border border-black/10 bg-white/60 p-6 transition-all duration-500 hover:-translate-y-1 hover:border-[#FF2B16]/40 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-white/[0.035] dark:hover:border-[#FF2B16]/50 dark:hover:shadow-black/20 sm:p-7">
+                <div class="mb-8 flex items-center justify-between border-b border-black/10 pb-5 dark:border-white/10">
+                    <span class="grid h-11 w-11 place-items-center rounded-full bg-[#FF2B16] text-white transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110">
+                        <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                    </span>
+                    <span class="text-xs font-medium tracking-widest text-black/30 dark:text-white/30">01</span>
+                </div>
+
+                <h3 class="text-xl font-bold tracking-tight text-black dark:text-white">
+                    Nova Identidade
+                </h3>
+
+                <p class="mt-3 text-sm leading-7 text-black/55 dark:text-white/55">
+                    Uma atualização estratégica para marcas que cresceram e precisam ser percebidas em outro nível.
+                </p>
+            </article>
+
+            <!-- 02 -->
+            <article class="group rounded-2xl border border-black/10 bg-white/60 p-6 transition-all duration-500 hover:-translate-y-1 hover:border-[#FF2B16]/40 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-white/[0.035] dark:hover:border-[#FF2B16]/50 dark:hover:shadow-black/20 sm:p-7">
+                <div class="mb-8 flex items-center justify-between border-b border-black/10 pb-5 dark:border-white/10">
+                    <span class="grid h-11 w-11 place-items-center rounded-full bg-[#171717] text-white transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110 dark:bg-white dark:text-black">
+                        <i data-lucide="layers-3" class="h-4 w-4"></i>
+                    </span>
+                    <span class="text-xs font-medium tracking-widest text-black/30 dark:text-white/30">02</span>
+                </div>
+
+                <h3 class="text-xl font-bold tracking-tight text-black dark:text-white">
+                    Marca
+                </h3>
+
+                <p class="mt-3 text-sm leading-7 text-black/55 dark:text-white/55">
+                   Direção visual, refinamento e aplicação da nova identidade.
+                </p>
+            </article>
+
+            <!-- 03 -->
+            <article class="group rounded-2xl border border-black/10 bg-white/60 p-6 transition-all duration-500 hover:-translate-y-1 hover:border-[#FF2B16]/40 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-white/[0.035] dark:hover:border-[#FF2B16]/50 dark:hover:shadow-black/20 sm:p-7">
+                <div class="mb-8 flex items-center justify-between border-b border-black/10 pb-5 dark:border-white/10">
+                    <span class="grid h-11 w-11 place-items-center rounded-full bg-[#171717] text-white transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110 dark:bg-white dark:text-black">
+                        <i data-lucide="monitor" class="h-4 w-4"></i>
+                    </span>
+                    <span class="text-xs font-medium tracking-widest text-black/30 dark:text-white/30">03</span>
+                </div>
+
+                <h3 class="text-xl font-bold tracking-tight text-black dark:text-white">
+                    Site
+                </h3>
+
+                <p class="mt-3 text-sm leading-7 text-black/55 dark:text-white/55">
+                    Um site profissional que transforma sua presença digital em uma experiência que transmite confiança.
+                </p>
+            </article>
+
+            <!-- 04 -->
+            <article class="group rounded-2xl border border-black/10 bg-white/60 p-6 transition-all duration-500 hover:-translate-y-1 hover:border-[#FF2B16]/40 hover:shadow-xl hover:shadow-black/5 dark:border-white/10 dark:bg-white/[0.035] dark:hover:border-[#FF2B16]/50 dark:hover:shadow-black/20 sm:p-7">
+                <div class="mb-8 flex items-center justify-between border-b border-black/10 pb-5 dark:border-white/10">
+                    <span class="grid h-11 w-11 place-items-center rounded-full bg-[#171717] text-white transition-transform duration-500 group-hover:rotate-[-8deg] group-hover:scale-110 dark:bg-white dark:text-black">
+                        <i data-lucide="mouse-pointer-click" class="h-4 w-4"></i>
+                    </span>
+                    <span class="text-xs font-medium tracking-widest text-black/30 dark:text-white/30">04</span>
+                </div>
+
+                <h3 class="text-xl font-bold tracking-tight text-black dark:text-white">
+                    Landing Page
+                </h3>
+
+                <p class="mt-3 text-sm leading-7 text-black/55 dark:text-white/55">
+                    Uma página criada com foco em uma única ação: transformar visitantes em oportunidades. 
+                </p>
+            </article>
+
+        </div>
+    </section>
+</div>
+
+
+               
+
+               
             </section>
 
             <!-- PROJECTS -->
 
             <section id="projects" class="mx-auto max-w-[1480px] overflow-hidden px-5 py-16 sm:px-8 lg:px-10 lg:py-24">
-                <div class="project-group mt-12" data-group="x">
-                    <div class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-                        <div>
-                            <div class="mb-4 flex items-center justify-between">
-                                <p
-                                    class="text-[9px] font-semibold uppercase tracking-[.2em] text-black/35 dark:text-white/35"
-                                >
-                                    Posso criar Marcas, Identidade e brand para Marcas compromissadas.
-                                </p>
-                            </div>
-                        </div>
+                
+<div class="project-group mt-12" data-group="x">
+    <div class="mb-8 flex flex-col justify-between gap-6 md:flex-row md:items-end">
 
-                        <div class="max-w-[330px]">
-                            <a href="#" class="start-conversation "mt-4 inline-flex items-center gap-2 text-[10px] font-semibold">
-                                Falar sobre um projeto
+        <div class="max-w-xl">
+            <span class="mb-3 block text-[10px] font-semibold uppercase tracking-[.2em] text-[#FF2B16]">
+                Identidade visual
+            </span>
 
-                                <span
-                                    class="grid h-7 w-7 place-items-center rounded-full bg-[#171717] text-white dark:bg-white dark:text-black"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        data-lucide="arrow-up-right"
-                                        aria-hidden="true"
-                                        class="lucide lucide-arrow-up-right h-3.5 w-3.5"
-                                    >
-                                        <path d="M7 7h10v10"></path>
-                                        <path d="M7 17 17 7"></path>
-                                    </svg>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <p class="text-sm leading-7 text-black/55 dark:text-white/55 sm:text-base">
+                Identidades visuais para marcas que querem crescer, transmitir confiança e ser reconhecidas.
+            </p>
+        </div>
+
+        <div class="md:shrink-0">
+            <a
+                href="#"
+                class="start-conversation group/link inline-flex items-center gap-3 text-xs font-semibold text-black transition-colors duration-300 hover:text-[#FF2B16] dark:text-white dark:hover:text-[#FF2B16]"
+            >
+                Vamos conversar sobre seu projeto
+
+                <span class="grid h-9 w-9 place-items-center rounded-full bg-black text-white transition-all duration-300 group-hover/link:rotate-45 group-hover/link:bg-[#FF2B16] dark:bg-white dark:text-black">
+                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                </span>
+            </a>
+        </div>
+
+    </div>
+</div>
+
                 <!-- SWIPER -->
                 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
@@ -816,45 +1080,35 @@
                     </div>
                 </div>
                 <div class="mt-16" data-group="intelligent">
-                    <div class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-                        <div>
-                            <div class="mb-4 flex items-center justify-between">
-                                <p
-                                    class="text-[9px] font-semibold uppercase tracking-[.2em] text-black/35 dark:text-white/35"
-                                >
-                                    Websites e landing pages inteligentes.
-                                </p>
-                            </div>
-                        </div>
+                   
+<div class="project-group mt-12" data-group="x">
+    <div class="mb-8 flex flex-col justify-between gap-6 md:flex-row md:items-end">
 
-                        <div class="max-w-[330px]">
-                            <a href="#" class="start-conversation "mt-4 inline-flex items-center gap-2 text-[10px] font-semibold">
-                                Falar sobre um projeto
+        <div class="max-w-xl">
+            <span class="mb-3 block text-[10px] font-semibold uppercase tracking-[.2em] text-[#FF2B16]">
+                Sites e langing pages
+            </span>
 
-                                <span
-                                    class="grid h-7 w-7 place-items-center rounded-full bg-[#171717] text-white dark:bg-white dark:text-black"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        data-lucide="arrow-up-right"
-                                        aria-hidden="true"
-                                        class="lucide lucide-arrow-up-right h-3.5 w-3.5"
-                                    >
-                                        <path d="M7 7h10v10"></path>
-                                        <path d="M7 17 17 7"></path>
-                                    </svg>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
+            <p class="text-sm leading-7 text-black/55 dark:text-white/55 sm:text-base">
+                Identidades visuais para marcas que querem crescer, transmitir confiança e ser reconhecidas.
+            </p>
+        </div>
+
+        <div class="md:shrink-0">
+            <a
+                href="#"
+                class="start-conversation group/link inline-flex items-center gap-3 text-xs font-semibold text-black transition-colors duration-300 hover:text-[#FF2B16] dark:text-white dark:hover:text-[#FF2B16]"
+            >
+                Vamos conversar sobre seu projeto
+
+                <span class="grid h-9 w-9 place-items-center rounded-full bg-black text-white transition-all duration-300 group-hover/link:rotate-45 group-hover/link:bg-[#FF2B16] dark:bg-white dark:text-black">
+                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                </span>
+            </a>
+        </div>
+
+    </div>
+</div>
 
                     <!-- SWIPER DINÂMICO -->
                     <div class="swiper webSwiper" id="webSwiper">
@@ -879,46 +1133,24 @@
                             </div>
                         </div>
                     </div>
+<div class="project-group mt-12" data-group="x">
+    <div class="mb-8 flex flex-col justify-between gap-6 md:flex-row md:items-end">
 
-                    <div class="mb-8 flex flex-col justify-between gap-5 md:flex-row md:items-end">
-                        <div>
-                            <div class="mb-4 flex items-center justify-between">
-                                <p
-                                    class="text-[9px] font-semibold uppercase tracking-[.2em] text-black/35 dark:text-white/35"
-                                >
-                                    Integração de e-commerces
-                                </p>
-                            </div>
-                        </div>
+        <div class="max-w-xl">
+            <span class="mb-3 block text-[10px] font-semibold uppercase tracking-[.2em] text-[#FF2B16]">
+                Lojas
+            </span>
 
-                        <div class="max-w-[330px]">
-                            <a href="#" class="start-conversation "mt-4 inline-flex items-center gap-2 text-[10px] font-semibold">
-                                Falar sobre um projeto
+            <p class="text-sm leading-7 text-black/55 dark:text-white/55 sm:text-base">
+                Identidades visuais para marcas que querem crescer, transmitir confiança e ser reconhecidas.
+            </p>
+        </div>
 
-                                <span
-                                    class="grid h-7 w-7 place-items-center rounded-full bg-[#171717] text-white dark:bg-white dark:text-black"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        data-lucide="arrow-up-right"
-                                        aria-hidden="true"
-                                        class="lucide lucide-arrow-up-right h-3.5 w-3.5"
-                                    >
-                                        <path d="M7 7h10v10"></path>
-                                        <path d="M7 17 17 7"></path>
-                                    </svg>
-                                </span>
-                            </a>
-                        </div>
-                    </div>
+       
+
+    </div>
+</div>
+
                     <!-- SWIPER DINÂMICO -->
                     <div class="swiper intelligentSwiper" id="intelligentSwiper">
                         <div class="swiper-wrapper" id="intelligentProjects"></div>
@@ -1026,20 +1258,14 @@
             <section id="about" class="mx-auto max-w-[1480px] px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
                 <div class="grid gap-12 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
                     <div>
-                        <div
-                            class="mb-5 inline-flex items-center gap-2 rounded-full bg-white px-3 py-2 text-[9px] font-semibold shadow-sm dark:bg-white/5"
-                        >
-                            <span class="h-1.5 w-1.5 rounded-full bg-[red]"></span>
-
-                            Sobre o trabalho
-                        </div>
+                        
 
                         <h2
                             class="max-w-[900px] text-[45px] font-medium leading-[.92] tracking-[-.06em] sm:text-[62px] lg:text-[78px]"
                         >
-                            Não construo apenas<br />
+                            Não faço apenas<br />
 
-                            <span class="text-black/25 dark:text-white/25"> coisas bonitas. </span>
+                            <span class="text-black/25 dark:text-white/25"> interfaces bonitas. </span>
                         </h2>
 
                         <p class="mt-8 max-w-[650px] text-[14px] leading-[1.75] text-black/60 dark:text-white/60">
@@ -1111,242 +1337,7 @@
                 </div>
             </section>
 
-            <!-- SERVICES -->
-
-            <section id="services" class="mx-auto max-w-[1480px] px-5 py-20 sm:px-8 lg:px-10 lg:py-28">
-                <div class="mb-12 max-w-[900px]">
-                    <span class="text-xs font-semibold uppercase tracking-[.2em] text-[#FF2B16]"> Meus Serviços </span>
-
-                    <h2 class="text-[48px] font-medium leading-[.9] tracking-[-.065em] sm:text-[70px] lg:text-[88px]">
-                        Você traz um trabalho.<br />
-
-                        <span class="text-black/25 dark:text-white/25"> Eu construo a solução. </span>
-                    </h2>
-                </div>
-
-                <div class="lg:p-10">
-                    <!-- SERVICES -->
-                    <section id="services" class="py-20 sm:py-28 lg:py-36">
-                        <div class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-                            <!-- 01 -->
-                            <article class="group">
-                                <div class="mb-5 flex items-center justify-between border-b border-black/10 pb-5">
-                                    <span
-                                        class="grid h-10 w-10 place-items-center rounded-full bg-[#FF2B16] text-white"
-                                    >
-                                        <i data-lucide="refresh-cw" class="h-4 w-4"></i>
-                                    </span>
-
-                                    <span class="text-xs text-black/30"> 01 </span>
-                                </div>
-
-                                <h3 class="text-xl font-bold tracking-tight">Nova Identidade</h3>
-
-                                <p class="mt-3 text-sm leading-6 text-black/45">
-                                    Uma atualização estratégica para marcas que cresceram e precisam ser percebidas em
-                                    outro nível. Direção visual, refinamento e aplicação essencial da nova identidade.
-                                    <!-- <strong class="text-black/70">R$ 1.800 · 7 dias.</strong> -->
-                                </p>
-                            </article>
-
-                            <!-- 02 -->
-                            <article class="group">
-                                <div class="mb-5 flex items-center justify-between border-b border-black/10 pb-5">
-                                    <span
-                                        class="grid h-10 w-10 place-items-center rounded-full bg-[#050505] text-white"
-                                    >
-                                        <i data-lucide="layers-3" class="h-4 w-4"></i>
-                                    </span>
-
-                                    <span class="text-xs text-black/30"> 02 </span>
-                                </div>
-
-                                <h3 class="text-xl font-bold tracking-tight">Marca</h3>
-
-                                <p class="mt-3 text-sm leading-6 text-black/45">
-                                    Construção de uma identidade visual completa, pensada para posicionar sua marca com
-                                    clareza e consistência. Logo, tipografia, cores e direção visual.
-                                    <!-- <strong class="text-black/70">R$ 2.500 · 10 dias.</strong> -->
-                                </p>
-                            </article>
-
-                            <!-- 03 -->
-                            <article class="group">
-                                <div class="mb-5 flex items-center justify-between border-b border-black/10 pb-5">
-                                    <span
-                                        class="grid h-10 w-10 place-items-center rounded-full bg-[#050505] text-white"
-                                    >
-                                        <i data-lucide="monitor" class="h-4 w-4"></i>
-                                    </span>
-
-                                    <span class="text-xs text-black/30"> 03 </span>
-                                </div>
-
-                                <h3 class="text-xl font-bold tracking-tight">Site</h3>
-
-                                <p class="mt-3 text-sm leading-6 text-black/45">
-                                    Um site profissional que transforma sua presença digital em uma experiência que
-                                    transmite confiança e valor. Estrutura, design responsivo, desenvolvimento e
-                                    publicação.
-                                    <!-- <strong class="text-black/70">R$ 2.500 · 7 dias.</strong> -->
-                                </p>
-                            </article>
-
-                            <!-- 04 -->
-                            <article class="group">
-                                <div class="mb-5 flex items-center justify-between border-b border-black/10 pb-5">
-                                    <span
-                                        class="grid h-10 w-10 place-items-center rounded-full bg-[#050505] text-white"
-                                    >
-                                        <i data-lucide="mouse-pointer-click" class="h-4 w-4"></i>
-                                    </span>
-
-                                    <span class="text-xs text-black/30"> 04 </span>
-                                </div>
-
-                                <h3 class="text-xl font-bold tracking-tight">Landing Page</h3>
-
-                                <p class="mt-3 text-sm leading-6 text-black/45">
-                                    Uma página criada com foco em uma única ação: transformar visitantes em
-                                    oportunidades. Estratégia de conteúdo, design, desenvolvimento e integração com
-                                    WhatsApp.
-                                    <!-- <strong class="text-black/70">R$ 1.200 · 3–5 dias.</strong> -->
-                                </p>
-                            </article>
-                        </div>
-                    </section>
-                </div>
-
-                <div class="grid gap-4 lg:grid-cols-3">
-                    <article
-                        class="group rounded-[30px] bg-[#171717] p-7 text-white shadow-dark transition duration-500 hover:-translate-y-1 sm:p-9"
-                    >
-                        <div class="flex items-center justify-between">
-                            <span class="text-[9px] font-semibold uppercase tracking-[.2em] text-white/40">
-                                01 / Brand
-                            </span>
-
-                            <i data-lucide="layers" class="h-4 w-4 text-[#ff3008]"></i>
-                        </div>
-
-                        <h3 class="mt-20 text-[36px] font-medium leading-[.95] tracking-[-.04em]">
-                            Uma marca pronta para ser levada a sério.
-                        </h3>
-
-                        <p class="mt-6 text-[11px] leading-[1.7] text-white/45">
-                            Estratégia, identidade visual e direção de marca para negócios que precisam sair do
-                            improviso e construir uma presença profissional.
-                        </p>
-
-                        <ul class="mt-8 space-y-3 text-[10px] text-white/65">
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Estratégia de marca</li>
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Identidade visual</li>
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Sistema visual</li>
-                        </ul>
-
-                        <a href="#" class="start-conversation "mt-10 inline-flex items-center gap-3 text-[10px] font-semibold">
-                            Quero construir minha marca
-
-                            <span class="grid h-8 w-8 place-items-center rounded-full bg-white text-black">
-                                <i data-lucide="arrow-up-right" class="h-3.5 w-3.5"></i>
-                            </span>
-                        </a>
-                    </article>
-
-                    <article
-                        class="group rounded-[30px] border border-black/10 bg-white p-7 shadow-soft transition duration-500 hover:-translate-y-1 dark:border-white/10 dark:bg-white/5 sm:p-9"
-                    >
-                        <div class="flex items-center justify-between">
-                            <span
-                                class="text-[9px] font-semibold uppercase tracking-[.2em] text-black/35 dark:text-white/35"
-                            >
-                                02 / Digital
-                            </span>
-
-                            <i data-lucide="monitor-smartphone" class="h-4 w-4 text-[#ff3008]"></i>
-                        </div>
-
-                        <h3 class="mt-20 text-[36px] font-medium leading-[.95] tracking-[-.04em]">
-                            Um site que apresenta seu negócio e ajuda a vender.
-                        </h3>
-
-                        <p class="mt-6 text-[11px] leading-[1.7] text-black/45 dark:text-white/45">
-                            Landing pages e sites com estratégia, UX, copy e design para transformar sua presença
-                            digital em uma ferramenta comercial.
-                        </p>
-
-                        <ul class="mt-8 space-y-3 text-[10px] text-black/60 dark:text-white/60">
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Landing pages</li>
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Sites institucionais</li>
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Páginas de campanha</li>
-                        </ul>
-
-                        <a href="#" class="start-conversation "mt-10 inline-flex items-center gap-3 text-[10px] font-semibold">
-                            Quero um site
-
-                            <span
-                                class="grid h-8 w-8 place-items-center rounded-full bg-[#171717] text-white dark:bg-white dark:text-black"
-                            >
-                                <i data-lucide="arrow-up-right" class="h-3.5 w-3.5"></i>
-                            </span>
-                        </a>
-                    </article>
-
-                    <article
-                        class="group rounded-[30px] border border-black/10 bg-white p-7 shadow-soft transition duration-500 hover:-translate-y-1 dark:border-white/10 dark:bg-white/5 sm:p-9"
-                    >
-                        <div class="flex items-center justify-between">
-                            <span
-                                class="text-[9px] font-semibold uppercase tracking-[.2em] text-black/35 dark:text-white/35"
-                            >
-                                03 / Software
-                            </span>
-
-                            <i data-lucide="code-2" class="h-4 w-4 text-[#ff3008]"></i>
-                        </div>
-
-                        <h3 class="mt-20 text-[36px] font-medium leading-[.95] tracking-[-.04em]">
-                            Um processo melhor pode virar software.
-                        </h3>
-
-                        <p class="mt-6 text-[11px] leading-[1.7] text-black/45 dark:text-white/45">
-                            MVPs, automações e sistemas sob medida para problemas que precisam de uma solução digital
-                            mais eficiente.
-                        </p>
-
-                        <ul class="mt-8 space-y-3 text-[10px] text-black/60 dark:text-white/60">
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> MVPs</li>
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Automações</li>
-                            <li class="flex gap-2"><span class="text-[#ff3008]">+</span> Sistemas sob medida</li>
-                        </ul>
-
-                        <a href="#" class="start-conversation "mt-10 inline-flex items-center gap-3 text-[10px] font-semibold">
-                            Quero discutir uma solução
-
-                            <span
-                                class="grid h-8 w-8 place-items-center rounded-full bg-[#171717] text-white dark:bg-white dark:text-black"
-                            >
-                                <i data-lucide="arrow-up-right" class="h-3.5 w-3.5"></i>
-                            </span>
-                        </a>
-                    </article>
-                </div>
-
-                <div
-                    class="mt-10 flex flex-col justify-between gap-4 border-t border-black/10 pt-6 sm:flex-row sm:items-center dark:border-white/10"
-                >
-                    <p class="max-w-[650px] text-[11px] leading-[1.6] text-black/40 dark:text-white/40">
-                        Se você ainda não sabe exatamente o que precisa, tudo bem. Podemos começar pelo problema e
-                        encontrar juntos a solução mais simples.
-                    </p>
-
-                    <a href="#" class="start-conversation "inline-flex shrink-0 items-center gap-2 text-[10px] font-semibold">
-                        Conversar sobre meu projeto
-                        <i data-lucide="arrow-up-right" class="h-3.5 w-3.5"></i>
-                    </a>
-                </div>
-            </section>
-
+         
             <!-- PROCESS -->
 
             <section id="process" class="bg-[#171717] text-white dark:bg-black">
@@ -1456,7 +1447,7 @@
                             <h2
                                 class="mt-5 max-w-[900px] text-[52px] font-medium leading-[.88] tracking-[-.07em] sm:text-[76px] lg:text-[100px]"
                             >
-                                Tem um problema?
+                                Tem uma ideia ou desafio?
                                 <br />
                                 Vamos construir.
                             </h2>
@@ -1466,7 +1457,7 @@
                             href=" "
                             class="start-conversation group inline-flex w-fit items-center gap-4 rounded-full bg-white py-2 pl-6 pr-2 text-[11px] font-semibold text-black"
                         >
-                            Falar sobre meu Trabalho
+                            Começar uma conversa
 
                             <span
                                 class="grid h-10 w-10 place-items-center rounded-full bg-[#171717] text-white transition group-hover:rotate-45"
@@ -1968,7 +1959,7 @@
 
                 if (!modal || !frame || !viewport) return;
 
-                const baseURL = "https://viniciusflip.github.io/site/";
+                const baseURL = "https://designerviniciusaraujo.github.io/web/";
 
                 const devices = {
                     desktop: "100%",
@@ -2113,7 +2104,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     "landing-shopify",
                 ];
 
-                const baseURL = "https://viniciusflip.github.io/site/";
+                const baseURL = "https://designerviniciusaraujo.github.io/web/";
                 const container = swiperElement.querySelector("#intelligentProjects");
 
                 // GERAR CARDS
