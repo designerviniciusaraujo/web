@@ -2026,25 +2026,23 @@
 
         <!-- SWIPER INTELIGENTE -->
         <!-- SWIPER INTELIGENTE -->
-        <script>
-            document.addEventListener("DOMContentLoaded", () => {
-                const swiperElement = document.querySelector("#intelligentSwiper");
-                if (!swiperElement) return;
+     
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const swiperElement = document.querySelector("#intelligentSwiper");
+    if (!swiperElement) return;
 
-                // TEMAS
-                const intelligentArray = [
-                    "e-vogue",
-                    "e-beauty"
-                     
-                ];
+    const intelligentArray = [
+        "e-vogue",
+        "e-beauty"
+    ];
 
-                const baseURL = "https://designerviniciusaraujo.github.io/machine/web/";
-                const container = swiperElement.querySelector("#intelligentProjects");
+    const baseURL = "https://designerviniciusaraujo.github.io/web/";
+    const container = swiperElement.querySelector("#intelligentProjects");
 
-                // GERAR CARDS
-                container.innerHTML = intelligentArray
-                    .map(
-                        (theme) => `
+    if (!container) return;
+
+    container.innerHTML = intelligentArray.map(theme => `
         <div class="swiper-slide">
             <article
                 class="project-card group relative h-[200px] overflow-hidden rounded-[20px] bg-cover bg-center shadow-soft transition duration-500 hover:-translate-y-1 sm:h-[500px] lg:h-[290px]"
@@ -2052,15 +2050,10 @@
                 data-project="${theme}"
                 style="background-image: url('${baseURL}e-machine/${theme}/screens.png')"
             >
-
-                <!-- OVERLAY SOMENTE DESKTOP -->
                 <div class="pointer-events-none absolute inset-0 z-0 hidden rounded-[20px] bg-gradient-to-t from-black/85 via-black/15 to-transparent sm:block"></div>
 
-                <!-- FOOTER MINIMALISTA -->
-                <div class="project-controls hidden absolute inset-x-0 bottom-0 items-center justify-end border-t border-white/10 bg-black/70 backdrop-blur-md sm:flex">
-
+                <div class="project-controls absolute inset-x-0 bottom-0 hidden items-center justify-end border-t border-white/10 bg-black/70 backdrop-blur-md sm:flex">
                     <div class="flex h-10 w-full items-center justify-end sm:h-9 sm:w-auto sm:px-2">
-
                         <button
                             type="button"
                             data-obj="${theme}"
@@ -2069,47 +2062,39 @@
                         >
                             Ver
                         </button>
-
                     </div>
                 </div>
-
             </article>
         </div>
-    `
-                    )
-                    .join("");
+    `).join("");
 
-                // INICIALIZAR SWIPER
-                if (swiperElement.swiper) {
-                    swiperElement.swiper.destroy(true, true);
-                }
+    if (swiperElement.swiper) {
+        swiperElement.swiper.destroy(true, true);
+    }
 
-                new Swiper(swiperElement, {
-                    slidesPerView: 1,
-                    spaceBetween: 20,
-                    loop: true,
+    new Swiper(swiperElement, {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        loop: true,
 
-                    pagination: {
-                        el: swiperElement.querySelector(".intelligent-pagination"),
-                        clickable: true,
-                    },
+        pagination: {
+            el: swiperElement.querySelector(".intelligent-pagination"),
+            clickable: true,
+        },
 
-                    navigation: {
-                        nextEl: swiperElement.querySelector(".intelligent-next"),
-                        prevEl: swiperElement.querySelector(".intelligent-prev"),
-                    },
+        navigation: {
+            nextEl: swiperElement.querySelector(".intelligent-next"),
+            prevEl: swiperElement.querySelector(".intelligent-prev"),
+        },
 
-                    breakpoints: {
-                        640: {
-                            slidesPerView: 2,
-                        },
-                        1024: {
-                            slidesPerView: 3,
-                        },
-                    },
-                });
-            });
-        </script>
+        breakpoints: {
+            640: { slidesPerView: 2 },
+            1024: { slidesPerView: 3 },
+        },
+    });
+});
+</script>
+
         <script>
             document.addEventListener("DOMContentLoaded", () => {
                 const swiperElement = document.querySelector("#webSwiper");
